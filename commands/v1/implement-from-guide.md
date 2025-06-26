@@ -63,20 +63,27 @@ description: "実装ガイドに基づく実装実行とPR作成"
 # (step7-final-implementation-guide.mdの該当セクションから)
 ```
 
-### 3. テスト実装
+### 3. テスト実装戦略に基づく実装
 
-#### ユニットテスト作成
+#### 受け入れテスト作成（優先実装）
 ```bash
 # テストディレクトリの作成
-!mkdir -p tests/unit tests/integration tests/performance
+!mkdir -p tests/acceptance tests/unit tests/special
 
-# 実装ガイドからテストコードを抽出・実装
-# (step7-final-implementation-guide.mdの「4. テスト実装」セクションから)
+# 実装ガイドから受け入れテストコードを抽出・実装（優先）
+# (step7-final-implementation-guide.mdの「4.1 受け入れテスト」セクションから)
+# ユーザーストーリー形式・Given-When-Then形式で実装
 ```
 
-#### 統合テスト作成
+#### 単体テスト作成（最小限実装）
 ```bash
-# 実装ガイドに基づく統合テストの実装
+# 受け入れテストでカバーできない部分のみ単体テスト実装
+# 複雑なアルゴリズム、エラーハンドリング、純粋関数のみ
+```
+
+#### 特別要件テスト作成（必要に応じて）
+```bash
+# 外部連携、機械学習、パフォーマンス要件がある場合のみ実装
 ```
 
 ### 4. 品質保証実行
@@ -95,11 +102,14 @@ description: "実装ガイドに基づく実装実行とPR作成"
 
 #### テスト実行
 ```bash
-# ユニットテスト実行
+# 受け入れテスト実行（優先）
+!ls uv.lock && uv run --frozen pytest tests/acceptance/ -v || pytest tests/acceptance/ -v
+
+# 単体テスト実行（最小限）
 !ls uv.lock && uv run --frozen pytest tests/unit/ -v || pytest tests/unit/ -v
 
-# 統合テスト実行
-!ls uv.lock && uv run --frozen pytest tests/integration/ -v || pytest tests/integration/ -v
+# 特別要件テスト実行（必要に応じて）
+!ls uv.lock && uv run --frozen pytest tests/special/ -v || pytest tests/special/ -v
 
 # 全テスト実行
 !ls uv.lock && uv run --frozen pytest tests/ -v || pytest tests/ -v
@@ -138,8 +148,9 @@ $(date -u +%Y-%m-%dT%H:%M:%SZ)
 ### 新規作成ファイル
 - `src/models/issue_${ARGUMENTS}_model.py`: データモデル実装
 - `src/service/issue_${ARGUMENTS}_service.py`: ビジネスロジック実装
-- `tests/unit/test_issue_${ARGUMENTS}_service.py`: ユニットテスト
-- `tests/integration/test_issue_${ARGUMENTS}_api.py`: 統合テスト
+- `tests/acceptance/test_issue_${ARGUMENTS}_acceptance.py`: 受け入れテスト（主要）
+- `tests/unit/test_issue_${ARGUMENTS}_service.py`: 単体テスト（最小限）
+- `tests/special/test_issue_${ARGUMENTS}_special.py`: 特別要件テスト（必要に応じて）
 
 ### 既存ファイル修正
 - `src/api/main_api.py`: 新規エンドポイント追加
@@ -151,8 +162,9 @@ $(date -u +%Y-%m-%dT%H:%M:%SZ)
 - [ ] コードフォーマット: 適用完了
 
 ### テスト実行結果
-- [ ] ユニットテスト: X件中X件成功
-- [ ] 統合テスト: X件中X件成功
+- [ ] 受け入れテスト: X件中X件成功（ユーザー要求検証）
+- [ ] 単体テスト: X件中X件成功（最小限）
+- [ ] 特別要件テスト: X件中X件成功（必要に応じて）
 - [ ] テストカバレッジ: X%
 
 ## Issue要求充足確認
@@ -181,8 +193,8 @@ $(date -u +%Y-%m-%dT%H:%M:%SZ)
 !git add src/models/issue_${ARGUMENTS}_model.py
 !git add src/service/issue_${ARGUMENTS}_service.py  
 !git add src/api/main_api.py
+!git add tests/acceptance/test_issue_${ARGUMENTS}_acceptance.py
 !git add tests/unit/test_issue_${ARGUMENTS}_service.py
-!git add tests/integration/test_issue_${ARGUMENTS}_api.py
 
 # ドキュメントファイルのステージング  
 !git add docs/issue-$ARGUMENTS/implementation/implementation-result.md
@@ -198,7 +210,7 @@ Implement Issue #$ARGUMENTS: [機能名の簡潔な説明]
 - Add new data model for Issue #$ARGUMENTS functionality
 - Implement service layer with business logic
 - Add API endpoint for new feature
-- Include comprehensive unit and integration tests
+- Include comprehensive acceptance and unit tests
 - Ensure type safety and code quality standards
 
 Closes #$ARGUMENTS
@@ -228,21 +240,22 @@ Issue #$ARGUMENTS の要求に基づく新機能実装
 - **データモデル**: Pydantic v2によるスキーマ定義
 - **サービス層**: ビジネスロジックの実装
 - **API層**: RESTエンドポイントの追加
-- **テスト**: ユニット・統合テストの完全実装
+- **テスト**: 受け入れテスト中心の包括的テスト実装
 
 ## 変更ファイル
 ### 新規作成
 - `src/models/issue_${ARGUMENTS}_model.py`
 - `src/service/issue_${ARGUMENTS}_service.py`
+- `tests/acceptance/test_issue_${ARGUMENTS}_acceptance.py`
 - `tests/unit/test_issue_${ARGUMENTS}_service.py`
-- `tests/integration/test_issue_${ARGUMENTS}_api.py`
 
 ### 既存修正
 - `src/api/main_api.py`
 
 ## テスト結果
-- ✅ ユニットテスト: 全件成功
-- ✅ 統合テスト: 全件成功  
+- ✅ 受け入れテスト: 全件成功（ユーザー要求検証）
+- ✅ 単体テスト: 必要最小限実装・成功
+- ✅ 特別要件テスト: 該当する場合のみ実装・成功  
 - ✅ 型チェック: 合格
 - ✅ リントチェック: 合格
 - ✅ テストカバレッジ: [カバレッジ%]%
@@ -285,8 +298,9 @@ EOF
 ### 🔍 品質保証結果
 - ✅ 型チェック合格
 - ✅ リントチェック合格  
-- ✅ ユニットテスト全件成功
-- ✅ 統合テスト全件成功
+- ✅ 受け入れテスト全件成功（ユーザー要求中心）
+- ✅ 単体テスト最小限実装・成功
+- ✅ 特別要件テスト必要に応じて実装・成功
 - ✅ テストカバレッジ基準クリア
 
 ### 📁 完全なトレーサビリティ

@@ -222,19 +222,94 @@ async def handle_issue_$ARGUMENTS(
     return await service.process_issue_request(request)
 ```
 
-## 4. テスト実装
+## 4. テスト実装戦略
 
-### 4.1 ユニットテスト: tests/unit/test_issue_$ARGUMENTS_service.py
+### 4.1 受け入れテスト（主要テスト）: tests/acceptance/test_issue_$ARGUMENTS_acceptance.py
+受け入れテストは以下の形式で記述し、ユーザーが実際に機能を使用する際の期待される動作を検証する：
+
+**ユーザー要求形式:**
+- [ ] **As a** [利用者], **I want to** [機能/処理] **so that** [得られる結果/価値]
+
+**Given-When-Then (シナリオテスト) 形式:**
+- [ ] **Given** [入力データ・環境条件]
+- [ ] **When** [機能実行・処理開始]  
+- [ ] **Then** [期待される出力・結果]
+
+**機能統合テスト:**
+- [ ] 機能がユーザーの要求をどのように満たすかを検証
+- [ ] 入力から出力までの全体的な動作を確認
+- [ ] 具体的な内部実装ではなく、機能の外部仕様・動作を重視
+
 ```python
 """
-Issue #$ARGUMENTS サービスのユニットテスト
+Issue #$ARGUMENTS 受け入れテスト
+"""
+import pytest
+from fastapi.testclient import TestClient
+from src.api.main_api import app
+
+class TestIssue${ARGUMENTS}Acceptance:
+    @pytest.fixture
+    def client(self):
+        return TestClient(app)
+    
+    def test_user_story_as_api_user_i_want_to_process_issue_request(self, client):
+        """ユーザーストーリー形式:
+        As a API利用者, I want to Issue要求を処理 so that ビジネス価値を得られる
+        """
+        # Given [前提条件]
+        valid_request_data = {
+            "field1": "business_value_data",
+            "field2": 100
+        }
+        
+        # When [行動/イベント]
+        response = client.post("/issue-$ARGUMENTS", json=valid_request_data)
+        
+        # Then [期待される結果]
+        assert response.status_code == 200
+        result = response.json()
+        assert "field1" in result  # ビジネス価値の確認
+        assert result["field2"] > 0  # ビジネスルール適用確認
+    
+    def test_feature_integration_complete_process(self, client):
+        """機能統合テスト:
+        Issue要求がユーザーの要求をどのように満たすかを検証
+        """
+        # Given: 実際のユースケースに基づく入力データ
+        real_world_scenario_data = {
+            "field1": "real_world_scenario",
+            "field2": 250
+        }
+        
+        # When: 機能実行・処理開始
+        response = client.post("/issue-$ARGUMENTS", json=real_world_scenario_data)
+        
+        # Then: 期待される出力・結果
+        assert response.status_code == 200
+        result = response.json()
+        # 機能の外部仕様・動作を重視した確認
+        assert result["field1"] == "real_world_scenario"
+        # 機能の動作がユーザー要求にどう応えるか確認
+        assert "created_at" in result
+```
+
+### 4.2 単体テスト（最小限実装）: tests/unit/test_issue_$ARGUMENTS_service.py
+受け入れテストでカバーできない最小限のもののみ実装：
+- [ ] **複雑なアルゴリズム**: 受け入れテストでは検証困難な内部処理
+- [ ] **エラーハンドリング**: 異常系の境界値処理
+- [ ] **純粋関数**: 副作用のない計算処理の正確性
+
+```python
+"""
+Issue #$ARGUMENTS サービスの単体テスト（最小限）
 """
 import pytest
 from unittest.mock import Mock, AsyncMock
 from src.service.issue_${ARGUMENTS}_service import Issue${ARGUMENTS}Service
 from src.models.issue_${ARGUMENTS}_model import Issue${ARGUMENTS}Model
 
-class TestIssue${ARGUMENTS}Service:
+class TestIssue${ARGUMENTS}ServiceMinimal:
     @pytest.fixture
     def mock_repository(self):
         repository = Mock()
@@ -246,67 +321,27 @@ class TestIssue${ARGUMENTS}Service:
         return Issue${ARGUMENTS}Service(mock_repository)
     
     @pytest.mark.asyncio
-    async def test_process_issue_request_success(self, service, mock_repository):
-        """Issue要求の正常処理テスト"""
-        # Given
-        input_data = Issue${ARGUMENTS}Model(
-            field1="test_value",
-            field2=123
-        )
-        mock_repository.save.return_value = input_data
-        
-        # When
-        result = await service.process_issue_request(input_data)
-        
-        # Then
-        assert result.field1 == "test_value"
-        assert result.field2 == 123
-        mock_repository.save.assert_called_once()
+    async def test_complex_algorithm_internal_processing(self, service):
+        """複雑なアルゴリズム: 受け入れテストでは検証困難な内部処理"""
+        # 受け入れテストではカバーできない複雑な内部計算のみテスト
+        pass
     
     @pytest.mark.asyncio
-    async def test_process_issue_request_validation_error(self, service):
-        """Issue要求のバリデーションエラーテスト"""
-        # Given
+    async def test_error_handling_boundary_values(self, service):
+        """エラーハンドリング: 異常系の境界値処理"""
+        # 異常系の境界値のみ、受け入れテストでカバーしきれない場合にテスト
         invalid_data = Issue${ARGUMENTS}Model(
-            field1="",  # 空文字（エラー）
-            field2=-1   # 負の値（エラー）
+            field1="",  # 境界値エラー
+            field2=-1   # 境界値エラー
         )
         
-        # When & Then
         with pytest.raises(ValueError):
             await service.process_issue_request(invalid_data)
-```
-
-### 4.2 統合テスト: tests/integration/test_issue_$ARGUMENTS_api.py
-```python
-"""
-Issue #$ARGUMENTS APIの統合テスト
-"""
-import pytest
-from fastapi.testclient import TestClient
-from src.api.main_api import app
-
-class TestIssue${ARGUMENTS}API:
-    @pytest.fixture
-    def client(self):
-        return TestClient(app)
     
-    def test_issue_$ARGUMENTS_endpoint_success(self, client):
-        """Issue #$ARGUMENTS エンドポイントの正常系テスト"""
-        # Given
-        request_data = {
-            "field1": "test_value",
-            "field2": 123
-        }
-        
-        # When
-        response = client.post("/issue-$ARGUMENTS", json=request_data)
-        
-        # Then
-        assert response.status_code == 200
-        response_data = response.json()
-        assert response_data["field1"] == "test_value"
-        assert response_data["field2"] == 123
+    def test_pure_function_calculation_accuracy(self):
+        """純粋関数: 副作用のない計算処理の正確性"""
+        # 副作用のない純粋な計算のみ、必要に応じてテスト
+        pass
 ```
 
 ## 5. 品質保証
@@ -336,14 +371,33 @@ uv run --frozen pytest tests/ -v
 uv run --frozen pytest --cov=src --cov-report=html
 ```
 
-### 5.3 パフォーマンステスト
+### 4.3 特別要件テスト（該当する場合）: tests/special/test_issue_$ARGUMENTS_special.py
+- [ ] **外部連携機能**: API・MCP等の外部サービス連携
+- [ ] **機械学習機能**: 特徴量リーケージ・データ分離検証
+- [ ] **パフォーマンス**: 大容量データ・高負荷時の動作
+
 ```python
-# tests/performance/test_issue_$ARGUMENTS_performance.py
-def test_issue_$ARGUMENTS_performance():
-    """Issue #$ARGUMENTS 機能のパフォーマンステスト"""
-    # パフォーマンス要件に基づくテスト実装
+# tests/special/test_issue_$ARGUMENTS_special.py
+def test_external_api_integration():
+    """外部連携機能: API・MCP等の外部サービス連携"""
+    # 外部サービス連携が必要な場合のみ実装
+    pass
+
+def test_machine_learning_data_leakage():
+    """機械学習機能: 特徴量リーケージ・データ分離検証"""
+    # 機械学習機能が含まれる場合のみ実装
+    pass
+
+def test_performance_requirements():
+    """パフォーマンス: 大容量データ・高負荷時の動作"""
+    # 大容量データ処理・パフォーマンス要件が重要な場合のみ実装
     pass
 ```
+
+### 5.3 テスト戦略の実装優先度
+1. **受け入れテスト**: 必須実装（ユーザー価値を検証）
+2. **単体テスト**: 受け入れテストで不足する部分のみ最小限実装
+3. **特別要件テスト**: プロジェクト要件に応じて選択的実装
 
 ## 6. デプロイメント
 
@@ -368,8 +422,9 @@ echo "ISSUE_$ARGUMENTS_FEATURE_ENABLED=true" >> .env
 
 ## 7. 実装完了チェックリスト
 - [ ] 全実装ファイルの作成・修正完了
-- [ ] ユニットテスト実装・実行成功
-- [ ] 統合テスト実装・実行成功
+- [ ] 受け入れテスト実装・実行成功（主要検証）
+- [ ] 単体テスト実装・実行成功（最小限）
+- [ ] 特別要件テスト実装・実行成功（必要に応じて）
 - [ ] 品質チェック（lint, type, format）完了
 - [ ] パフォーマンステスト実行・基準クリア
 - [ ] エラーハンドリング確認完了
@@ -403,11 +458,10 @@ echo "ISSUE_$ARGUMENTS_FEATURE_ENABLED=true" >> .env
 - [ ] API層実装完了
 - [ ] リポジトリ層実装完了（必要に応じて）
 
-## テスト実装
-- [ ] ユニットテスト実装完了
-- [ ] 統合テスト実装完了
-- [ ] エンドツーエンドテスト実装完了
-- [ ] パフォーマンステスト実装完了
+## テスト実装（新戦略）
+- [ ] 受け入れテスト実装完了（主要・必須）
+- [ ] 単体テスト実装完了（最小限のみ）
+- [ ] 特別要件テスト実装完了（必要に応じて）
 
 ## 品質保証
 - [ ] 型チェック合格
