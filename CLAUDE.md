@@ -9,7 +9,7 @@
 `/user:` プレフィックスで呼び出し
 
 #### セキュリティレビューコマンド例
-ファイル: `~/.claude/commands/security-review.md`
+ファイル: `~/.claude/commands/v1/security-review.md`
 ```markdown
 ---
 allowed-tools: ["Read", "Grep", "Bash"]
@@ -39,7 +39,7 @@ description: "コードのセキュリティ脆弱性をレビュー"
 `/project:` プレフィックスで呼び出し
 
 #### パフォーマンス最適化コマンド例
-ファイル: `.claude/commands/optimize.md`
+ファイル: `.claude/commands/v1/optimize.md`
 ```markdown
 ---
 allowed-tools: ["Bash", "Read", "Edit"]
@@ -64,7 +64,7 @@ description: "コードのパフォーマンス分析と最適化提案"
 ### 名前空間を使用した階層化コマンド
 
 #### フロントエンド専用コマンド
-ファイル: `.claude/commands/frontend/component-audit.md`
+ファイル: `.claude/commands/v1/frontend/component-audit.md`
 ```markdown
 ---
 description: "React コンポーネントのベストプラクティス監査"
@@ -86,7 +86,7 @@ description: "React コンポーネントのベストプラクティス監査"
 使用例: `/project:frontend:component-audit LoginForm.tsx`
 
 #### バックエンド専用コマンド
-ファイル: `.claude/commands/backend/api-review.md`
+ファイル: `.claude/commands/v1/backend/api-review.md`
 ```markdown
 ---
 allowed-tools: ["Read", "Grep", "Bash"]
@@ -239,11 +239,46 @@ ls -la output/
 ```
 
 ### コーディング規約
+
+#### 基本規約
 - **型ヒント**: 全ての関数・メソッドに必須
 - **docstring**: パブリックAPIに必須（Google/NumPy形式）
 - **行長制限**: 88文字
 - **データ検証**: Pydantic v2積極活用
 - **関数設計**: 小さく・焦点を絞った関数
+
+#### 設計原則
+- **DRY原則**: 重複コード排除、同一機能の一箇所集約
+- **簡潔性優先**: 同等機能なら最もコンパクトな記述を採用
+- **レイヤード設計**: API層 → サービス層 → リポジトリ層 ← モデル層
+- **依存性注入**: インターフェース定義による抽象基底クラス活用
+
+#### TDD実装規約
+- **Red-Green-Refactorサイクル**: 意図的失敗→最小実装→リファクタリング
+- **高抽象・低コスト**: ユーザー視点、高速実行、最小セットアップ
+- **簡素なテスト原則**: 核心機能のみ、公開インターフェース重視、最小モック
+- **保守性優先**: 実装変更時にテスト修正が不要な設計
+
+#### セキュリティ実装
+- **入力検証**: SQLインジェクション、XSS、パストラバーサル対策
+- **ログセキュリティ**: 機密情報のサニタイズ必須
+- **防御的プログラミング**: 外部データエラーの適切な処理
+
+#### 命名規則
+- **レイヤード構造**: `[feature]_api.py`, `[feature]_service.py`, `[feature]_repository.py`
+- **成果物命名**: `[種類]-YYYYMMDD.[拡張子]` 形式
+
+#### 品質保証・テスト戦略
+```bash
+# 段階的テスト実行規約
+uv run --frozen ruff check .              # リント
+uv run --frozen ruff format .             # フォーマット
+uv run --frozen pyright                   # 型チェック
+uv run --frozen pytest tests/unit/       # ユニットテスト
+uv run --frozen pytest tests/acceptance/ # 受け入れテスト
+uv run --frozen pytest tests/integration/ # 統合テスト
+```
+
 
 ### pre-commit設定例
 ```yaml
@@ -270,6 +305,7 @@ repos:
 - 並行実行を優先: 複数のBashコマンドは同時実行
 - 検索順序: Task → Grep → Glob
 - ファイル操作: Read → Edit/MultiEdit → Write
+- **冗長性の最小化**: 必要性が高い場合を除いて冗長な記述は避ける
 
 ### Git操作の安全性確保
 **CRITICAL**: `git add .` は絶対に使用禁止。必ず個別ファイル指定またはステージング内容を事前確認してください。
