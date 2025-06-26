@@ -1,0 +1,56 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python*)",
+      "Bash(uv*)",
+      "Bash(ruff*)",
+      "Bash(pytest*)",
+      "Bash(git*)",
+      "Bash(gh*)",
+      "Bash(ls*)",
+      "Bash(cat*)",
+      "Bash(grep*)",
+      "Bash(find*)",
+      "Bash(mkdir*)",
+      "Bash(rm*)",
+      "Bash(cp*)",
+      "Bash(mv*)",
+      "Bash(echo*)",
+      "Bash(head*)",
+      "Bash(tail*)",
+      "Bash(which*)",
+      "Bash(touch*)",
+      "Bash(chmod*)",
+      "Bash(wc*)",
+      "Bash(sort*)",
+      "Bash(uniq*)",
+      "Bash(diff*)",
+      "Bash(tar*)",
+      "Bash(zip*)",
+      "Bash(curl*)",
+      "Bash(ps*)",
+      "Bash(whoami*)",
+      "Bash(pwd*)",
+      "Bash(cd*)",
+      "Read(~/.bashrc)",
+      "Read(~/.zshrc)",
+      "Read(~/.gitconfig)",
+      "Read(pyproject.toml)",
+      "Read(requirements*.txt)",
+      "Read(.env*)",
+      "Read(Dockerfile*)",
+      "Read(.github/workflows/*)",
+      "Read(ruff.toml)",
+      "Read(.ruff.toml)",
+      "Read(setup.py)",
+      "Read(pytest.ini)"
+    ],
+    "deny": [
+      "Bash(sudo *)",
+      "Bash(rm -rf /)"
+    ]
+  },
+  "env": {
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1"
+  }
+}

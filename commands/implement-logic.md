@@ -15,6 +15,12 @@ description: "Green Phase実装：テスト通過のためのビジネスロジ�
 - **最小限実装**: テスト合格に必要な最小限のコード
 - **リファクタ準備**: 後のリファクタリングに備えたシンプルな実装
 
+### コード設計原則
+- **DRY原則**: 重複コードを排除、同一機能は一箇所に集約
+- **簡潔性優先**: 同等機能なら最もコンパクトな記述を採用
+- **冗長性の最小化**: 必要性が高い場合を除いて冗長な記述は避ける
+- **関数・構成の効率化**: 類似処理は統合、共通パターンは抽象化
+
 ## 実装戦略
 
 ### 1. 実装優先順位（下位層から）
@@ -66,18 +72,13 @@ class DataRepository(BaseRepository):
             file_path = self.data_dir / f"{source}.json"
             if file_path.exists():
                 with open(file_path, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                return [InputModel(**item) for item in data]
-            else:
-                # テスト用のダミーデータ生成
-                return [
-                    InputModel(
-                        field1=f"generated_data_{i}",
-                        field2=i,
-                        field3=[f"item_{i}"]
-                    )
-                    for i in range(3)
-                ]
+                    return [InputModel(**item) for item in json.load(f)]
+            
+            # テスト用ダミーデータ生成（DRY原則による簡略化）
+            return [
+                InputModel(field1=f"generated_data_{i}", field2=i, field3=[f"item_{i}"])
+                for i in range(3)
+            ]
         except Exception as e:
             # エラー時は空リストを返す（テスト通過優先）
             return []
@@ -87,19 +88,14 @@ class DataRepository(BaseRepository):
         try:
             file_path = self.data_dir / f"{destination}.json"
             
-            # データをJSON形式で保存
-            if hasattr(data, 'dict'):
-                # Pydanticモデルの場合
-                save_data = data.dict()
-            elif isinstance(data, list):
-                # リストの場合
-                save_data = [
-                    item.dict() if hasattr(item, 'dict') else item 
-                    for item in data
-                ]
-            else:
-                # その他の場合
-                save_data = data
+            # データをJSON形式で保存（DRY原則による統一化）
+            def serialize_item(item):
+                return item.dict() if hasattr(item, 'dict') else item
+            
+            save_data = (
+                serialize_item(data) if not isinstance(data, list)
+                else [serialize_item(item) for item in data]
+            )
             
             with open(file_path, 'w', encoding='utf-8') as f:
                 json.dump(save_data, f, ensure_ascii=False, indent=2)
@@ -168,15 +164,15 @@ class MainService:
         ビジネスロジック計算の実装
         受け入れテストの期待値に合わせた実装
         """
-        # テストで期待される計算を実装
-        computed_field = float(input_data.field2) * 2.5  # 計算ロジック
-        processed_count = len(input_data.field3)  # 処理件数
-        summary_value = float(input_data.field2)  # 要約値
+        # テスト期待値に合わせた計算（簡潔な実装）
+        computed_field = float(input_data.field2) * 2.5
+        processed_count = len(input_data.field3)
+        summary_value = float(input_data.field2)
         
-        # メタデータ作成
+        # メタデータ作成（必要最小限）
         metadata = {
             "input_field1": input_data.field1,
-            "processing_time": "0.001s",  # 簡易実装
+            "processing_time": "0.001s",
             "algorithm": "basic_calculation"
         }
         
@@ -401,11 +397,11 @@ class SecurityError(Exception):
 import asyncio
 
 def sync_wrapper(async_func, *args, **kwargs):
-    """非同期関数を同期的に実行"""
+    """Execute async function synchronously"""
     try:
         loop = asyncio.get_event_loop()
         if loop.is_running():
-            # 別スレッドで実行
+            # Execute in separate thread
             import concurrent.futures
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 future = executor.submit(asyncio.run, async_func(*args, **kwargs))
@@ -418,17 +414,17 @@ def sync_wrapper(async_func, *args, **kwargs):
 
 #### 2. テストデータの不一致
 ```python
-# テストで期待される値を確認
+# Check expected values in tests
 def debug_test_expectations():
-    """テストの期待値をデバッグ出力"""
+    """Debug output test expectations"""
     from tests.acceptance.test_main_feature import TestMainFeatureAcceptance
     test_instance = TestMainFeatureAcceptance()
-    # 期待値を確認...
+    # Check expected values...
 ```
 
 #### 3. 依存関係の問題
 ```bash
-# 依存関係の再同期
+# Dependency re-sync
 cd $ARGUMENTS && uv sync --frozen
 ```
 

@@ -15,6 +15,12 @@ description: "新規アーキテクチャ設計とレイヤード構造の定義
 - **Python標準**: uv + ruff + pyright + Pydantic v2
 - **テスト駆動**: 各層に対応するテストを設計
 
+### コード設計原則
+- **DRY原則**: 重複コードを排除、同一機能は一箇所に集約
+- **簡潔性優先**: 同等機能なら最もコンパクトな記述を採用
+- **冗長性の最小化**: 必要性が高い場合を除いて冗長な記述は避ける
+- **関数・構成の効率化**: 類似処理は統合、共通パターンは抽象化
+
 ## アーキテクチャ設計
 
 ### 1. 層構造の定義
@@ -57,7 +63,7 @@ class [FeatureService]:
         self.repository = [FeatureRepository]()
     
     async def process(self, data: [FeatureModel]) -> [ResultModel]:
-        # ビジネスロジック実装
+        # Business logic implementation
         pass
 ```
 
@@ -75,12 +81,12 @@ from typing import Optional, List
 from datetime import datetime
 
 class [FeatureModel](BaseModel):
-    field1: str = Field(..., description="説明")
+    field1: str = Field(..., description="Description")
     field2: Optional[float] = Field(None, ge=0.0)
     
     @validator('field1')
     def validate_field1(cls, v):
-        # カスタムバリデーション
+        # Custom validation
         return v
 ```
 
@@ -102,7 +108,7 @@ class [FeatureRepository]:
         self.data_dir = data_dir
     
     async def load_data(self, source: str) -> List[[FeatureModel]]:
-        # データ読み込み実装
+        # Data loading implementation
         pass
 ```
 

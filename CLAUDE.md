@@ -127,6 +127,24 @@ description: "API エンドポイントのレビュー"
 
 ## Pythonプロジェクトのデフォルト設定
 
+### 重要: uv環境の自動検出と使用
+**CRITICAL**: プロジェクトに `uv.lock` ファイルが存在する場合は、必ず `uv` を使用してください。システムのPythonは使用せず、すべてのPythonコマンドを `uv run` 経由で実行してください。
+
+```bash
+# uv.lockファイルの確認（最初に必ず実行）
+ls uv.lock
+
+# uv.lockが存在する場合の必須パターン
+uv run python script.py     # ✅ 正しい
+python script.py            # ❌ 間違い（システムPython使用）
+
+uv run pytest               # ✅ 正しい
+pytest                      # ❌ 間違い（システムPython使用）
+
+uv run ruff check .         # ✅ 正しい
+ruff check .                # ❌ 間違い（システムPython使用）
+```
+
 ### パッケージ管理（uv使用）
 ```bash
 # 依存関係のインストール
@@ -167,8 +185,57 @@ project/
 │   └── models/            # ドメインモデル層
 ├── tests/                 # テストコード
 ├── config/                # 設定ファイル
+├── output/                # 生成物・中間データ格納ディレクトリ
+│   ├── docs/              # 生成されたドキュメント
+│   ├── reports/           # 分析レポート・HTMLファイル
+│   ├── data/              # 中間データ・JSON・CSV等
+│   ├── logs/              # ログファイル
+│   └── artifacts/         # その他の成果物
 ├── pyproject.toml         # プロジェクト設定
 └── .pre-commit-config.yaml # pre-commitフック設定
+```
+
+### 重要: 生成物の出力先管理
+**CRITICAL**: コードから生成される全ての中間生成物・データ・レポートは必ず `output/` ディレクトリ配下に配置してください。
+
+#### 出力先の分類と使用例
+```bash
+# ドキュメント生成
+output/docs/仕様書-YYYYMMDD.md
+output/docs/設計書-YYYYMMDD.md
+output/docs/受け入れテスト基準-YYYYMMDD.md
+
+# レポート生成
+output/reports/分析レポート-YYYYMMDD.html
+output/reports/セキュリティレポート-YYYYMMDD.html
+output/reports/パフォーマンステスト結果-YYYYMMDD.html
+
+# データファイル
+output/data/サンプルデータ.json
+output/data/テストデータ.csv
+output/data/設定データ.yaml
+
+# ログファイル
+output/logs/テスト実行ログ-YYYYMMDD.log
+output/logs/ビルドログ-YYYYMMDD.log
+
+# その他成果物
+output/artifacts/スクリーンショット-YYYYMMDD.png
+output/artifacts/データベーススキーマ.sql
+```
+
+#### 必須の出力パターン
+- **ファイル命名**: `[種類]-[YYYYMMDD-HHMMSS].[拡張子]` 形式
+- **ディレクトリ作成**: 出力前に必要なサブディレクトリを作成
+- **gitignore**: `output/` ディレクトリを適切に管理（必要に応じて除外）
+
+#### 出力前のディレクトリ確認例
+```bash
+# outputディレクトリ構造の確認・作成
+mkdir -p output/{docs,reports,data,logs,artifacts}
+
+# 生成前の確認
+ls -la output/
 ```
 
 ### コーディング規約
@@ -203,3 +270,73 @@ repos:
 - 並行実行を優先: 複数のBashコマンドは同時実行
 - 検索順序: Task → Grep → Glob
 - ファイル操作: Read → Edit/MultiEdit → Write
+
+### Git操作の安全性確保
+**CRITICAL**: `git add .` は絶対に使用禁止。必ず個別ファイル指定またはステージング内容を事前確認してください。
+
+#### 必須のGit操作パターン
+```bash
+# ❌ 危険: 全ファイルを無条件でステージング
+git add .
+
+# ✅ 安全: 事前確認してから個別追加
+git status                    # 変更ファイルの確認
+git diff                      # 変更内容の確認
+git add src/specific_file.py  # 個別ファイル指定
+git add src/module/           # ディレクトリ指定
+
+# ✅ 安全: インタラクティブステージング
+git add -i                    # 対話的に選択
+git add -p                    # パッチ単位で選択
+```
+
+#### コミット前の必須チェック項目
+```bash
+# 1. ステージング内容の確認
+git status
+git diff --cached
+
+# 2. 除外すべきファイルの検出
+git status --porcelain | grep -E "\.(log|tmp|cache|pyc|pyo|pyd|__pycache__|\.DS_Store)"
+git status --porcelain | grep -E "output/"
+git status --porcelain | grep -E "(secret|password|token|key|credential)"
+
+# 3. 一時的なファイルの検出
+git status --porcelain | grep -E "(temp|tmp|test_|debug_|scratch)"
+```
+
+#### 自動除外すべきファイル/ディレクトリ
+- **output/**: 生成物・中間データ（基本的に除外）
+- **logs/**: ログファイル
+- **temp/**, **tmp/**: 一時ファイル
+- **test_**, **debug_**, **scratch**: 一時的なスクリプト
+- **secret**, **password**, **token**, **key**: 機密情報
+- **\*.log**, **\*.tmp**, **\*.cache**: 一時データ
+- **__pycache__/**, **\*.pyc**: Python実行時生成ファイル
+
+#### 推奨gitignore追加項目
+```bash
+# 生成物・中間データ
+output/
+logs/
+temp/
+tmp/
+
+# 一時的なスクリプト
+test_*
+debug_*
+scratch*
+
+# 機密情報ファイル
+*secret*
+*password*
+*token*
+*key*
+*credential*
+
+# 各種一時ファイル
+*.log
+*.tmp
+*.cache
+.DS_Store
+```

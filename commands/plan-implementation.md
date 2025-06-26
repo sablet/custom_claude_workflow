@@ -15,6 +15,12 @@ description: "実装計画書作成：TDD方針とタスク分解"
 - **レイヤード実装**: 下位層から上位層への段階的実装
 - **継続的品質保証**: uv + ruff + pyright による品質チェック
 
+### コード設計原則
+- **DRY原則**: 重複コードを排除、同一機能は一箇所に集約
+- **簡潔性優先**: 同等機能なら最もコンパクトな記述を採用
+- **冗長性の最小化**: 必要性が高い場合を除いて冗長な記述は避ける
+- **関数・構成の効率化**: 類似処理は統合、共通パターンは抽象化
+
 ## 実装戦略
 
 ### 1. 実装順序の決定
@@ -53,20 +59,20 @@ from src.api.[feature]_api import [FeatureAPI]
 
 class TestFeatureAcceptance:
     def test_main_use_case_happy_path(self):
-        """主要ユースケースの正常系テスト"""
-        # Given: 正常な入力データ
+        """Main use case normal path test"""
+        # Given: Normal input data
         input_data = {...}
         
-        # When: メイン機能を実行
+        # When: Execute main feature
         result = feature_api.process(input_data)
         
-        # Then: 期待する結果を取得
+        # Then: Get expected result
         assert result.status == "success"
         assert result.data is not None
     
     def test_main_use_case_error_handling(self):
-        """主要ユースケースの異常系テスト"""
-        # エラーケースの定義
+        """Main use case error handling test"""
+        # Error case definition
         pass
 ```
 
@@ -83,15 +89,15 @@ class Test[TargetClass]:
         return [TargetClass]()
     
     def test_method_normal_case(self, target):
-        """正常系テスト"""
+        """Normal case test"""
         pass
     
     def test_method_boundary_case(self, target):
-        """境界値テスト"""
+        """Boundary value test"""
         pass
     
     def test_method_error_case(self, target):
-        """異常系テスト"""
+        """Error case test"""
         pass
 ```
 
@@ -127,7 +133,7 @@ class Test[TargetClass]:
   class [EntityModel](BaseModel):
       id: Optional[str] = None
       created_at: datetime
-      # その他フィールド
+      # Other fields
   ```
 
 - [ ] **バリューオブジェクト**: 値オブジェクトの実装
@@ -160,7 +166,7 @@ class Test[TargetClass]:
   
   class [EntityRepository](BaseRepository):
       async def find_by_id(self, id: str) -> Optional[[EntityModel]]:
-          # 実装
+          # Implementation
           pass
   ```
 
@@ -183,7 +189,7 @@ class Test[TargetClass]:
           self.repository = repository
       
       async def execute_use_case(self, input: [InputModel]) -> [OutputModel]:
-          # ビジネスロジック実装
+          # Business logic implementation
           pass
   ```
 

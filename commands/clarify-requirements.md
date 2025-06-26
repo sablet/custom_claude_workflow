@@ -60,18 +60,18 @@ def [main_function_name](
     config: [ConfigType] = None,
     **options
 ) -> [OutputType]:
-    """[What で定義した主要機能の説明]
+    """[Description of main function defined in What section]
     
     Args:
-        input_data: [入力データの説明・制約]
-        config: [設定パラメータの説明]
-        **options: [追加オプション]
+        input_data: [Description and constraints of input data]
+        config: [Description of configuration parameters]
+        **options: [Additional options]
     
     Returns:
-        [OutputType]: [出力結果の説明・構造]
+        [OutputType]: [Description and structure of output result]
     
     Raises:
-        [ExceptionType]: [発生条件]
+        [ExceptionType]: [Occurrence conditions]
     """
 ```
 
@@ -109,6 +109,24 @@ def [main_function_name](
 - [ ] **パフォーマンス**: [処理時間・メモリ使用量の目標値]
 - [ ] **保守性**: [コードの可読性・拡張性]
 - [ ] **セキュリティ**: [入力検証・権限管理の実装]
+
+### テスト戦略判定
+要求内容に基づいて適切なテスト戦略を選択：
+
+**一般ケース**
+- [ ] **標準テスト**: シンプルな単体テスト・統合テスト・受け入れテスト
+
+**追加テスト（該当する場合）**
+- [ ] **A: 外部連携機能** (API、MCP等)
+  - インターフェース契約テスト
+  - 外部サービスとの統合テスト
+  - APIレスポンス形式・エラーハンドリングテスト
+
+- [ ] **B: 機械学習系機能**
+  - 特徴量リーケージ対策テスト
+    - ラベルと特徴量の相関係数チェック（閾値: 0.8以上でテスト失敗）
+    - 時系列データでの未来情報使用検出
+    - 訓練・テストデータ分離の検証
 
 ### 検証方法
 **自動テスト（uv + ruff + pyright）**

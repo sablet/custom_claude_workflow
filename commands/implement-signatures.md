@@ -16,6 +16,12 @@ description: "シグネチャ実装：テスト失敗確認用の最小実装"
 - **型安全性**: pyright チェック合格
 - **レイヤード構造**: 適切な層分離を維持
 
+### コード設計原則
+- **DRY原則**: 重複コードを排除、同一機能は一箇所に集約
+- **簡潔性優先**: 同等機能なら最もコンパクトな記述を採用
+- **冗長性の最小化**: 必要性が高い場合を除いて冗長な記述は避ける
+- **関数・構成の効率化**: 類似処理は統合、共通パターンは抽象化
+
 ## 実装戦略
 
 ### 1. 実装順序（下位層から）
@@ -27,10 +33,10 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 
 class InputModel(BaseModel):
-    """入力データモデル"""
-    field1: str = Field(..., description="必須文字列フィールド")
-    field2: int = Field(..., ge=0, description="非負整数フィールド")
-    field3: List[str] = Field(default_factory=list, description="文字列リスト")
+    """Input data model"""
+    field1: str = Field(..., description="Required string field")
+    field2: int = Field(..., ge=0, description="Non-negative integer field")
+    field3: List[str] = Field(default_factory=list, description="String list")
     
     class Config:
         validate_assignment = True
@@ -41,22 +47,19 @@ from pydantic import BaseModel
 from typing import Dict, Any
 from datetime import datetime
 
-class OutputModel(BaseModel):
-    """出力データモデル"""
-    status: str = Field(..., description="処理ステータス")
-    data: Optional['ProcessedData'] = None
-    error_message: Optional[str] = None
-    timestamp: datetime = Field(default_factory=datetime.now)
-
 class ProcessedData(BaseModel):
-    """処理結果データ"""
-    computed_field: float = Field(..., description="計算結果")
-    processed_count: int = Field(..., description="処理件数")
-    summary_value: float = Field(..., description="要約値")
+    """Processed result data"""
+    computed_field: float = Field(..., description="Computed result")
+    processed_count: int = Field(..., description="Processing count")
+    summary_value: float = Field(..., description="Summary value")
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
-# 前方参照の解決
-OutputModel.model_rebuild()
+class OutputModel(BaseModel):
+    """Output data model"""
+    status: str = Field(..., description="Processing status")
+    data: Optional[ProcessedData] = None
+    error_message: Optional[str] = None
+    timestamp: datetime = Field(default_factory=datetime.now)
 ```
 
 #### フェーズ2: リポジトリ層シグネチャ (`src/repository/`)
@@ -66,16 +69,16 @@ from abc import ABC, abstractmethod
 from typing import Any, Optional, List
 
 class BaseRepository(ABC):
-    """リポジトリの基底クラス"""
+    """Base repository class"""
     
     @abstractmethod
     async def load_data(self, source: str) -> List[Any]:
-        """データ読み込み"""
+        """Load data"""
         pass
     
     @abstractmethod
     async def save_data(self, data: Any, destination: str) -> bool:
-        """データ保存"""
+        """Save data"""
         pass
 
 # src/repository/data_repository.py
@@ -84,16 +87,16 @@ from src.models.input_model import InputModel
 from typing import List
 
 class DataRepository(BaseRepository):
-    """データアクセス実装（シグネチャのみ）"""
+    """Data access implementation (signature only)"""
     
     async def load_data(self, source: str) -> List[InputModel]:
-        """データ読み込み - TODO: 実装予定"""
-        # Red Phase: 意図的な未実装
+        """Load data - TODO: Implementation pending"""
+        # Red Phase: Intentionally unimplemented
         raise NotImplementedError("load_data implementation pending")
     
     async def save_data(self, data: Any, destination: str) -> bool:
-        """データ保存 - TODO: 実装予定"""
-        # Red Phase: 意図的な未実装
+        """Save data - TODO: Implementation pending"""
+        # Red Phase: Intentionally unimplemented
         raise NotImplementedError("save_data implementation pending")
 ```
 
@@ -106,33 +109,33 @@ from src.repository.data_repository import DataRepository
 from typing import Optional
 
 class MainService:
-    """メインビジネスロジック（シグネチャのみ）"""
+    """Main business logic (signature only)"""
     
     def __init__(self, repository: Optional[DataRepository] = None):
         self.repository = repository or DataRepository()
     
     async def process_main_feature(self, input_data: InputModel) -> OutputModel:
         """
-        メイン機能処理 - TODO: ビジネスロジック実装予定
+        Main feature processing - TODO: Business logic implementation pending
         
         Args:
-            input_data: 入力データ
+            input_data: Input data
             
         Returns:
-            OutputModel: 処理結果
+            OutputModel: Processing result
         """
-        # Red Phase: 最小限の応答（失敗するはず）
+        # Red Phase: Minimal response (should fail)
         try:
-            # 型チェック通過用の最小実装
+            # Minimal implementation for type checking
             processed_data = ProcessedData(
-                computed_field=0.0,  # 間違った値
-                processed_count=0,   # 間違った値
-                summary_value=0.0,   # 間違った値
+                computed_field=0.0,  # Wrong value
+                processed_count=0,   # Wrong value
+                summary_value=0.0,   # Wrong value
                 metadata={}
             )
             
             return OutputModel(
-                status="error",  # わざと失敗ステータス
+                status="error",  # Intentionally failing status
                 data=processed_data,
                 error_message="Implementation pending"
             )
@@ -143,8 +146,8 @@ class MainService:
             )
     
     def _calculate_business_logic(self, input_data: InputModel) -> ProcessedData:
-        """ビジネスロジック計算 - TODO: 実装予定"""
-        # Red Phase: 意図的な未実装
+        """Business logic calculation - TODO: Implementation pending"""
+        # Red Phase: Intentionally unimplemented
         raise NotImplementedError("Business logic implementation pending")
 ```
 
@@ -157,14 +160,14 @@ from src.service.main_service import MainService
 from typing import Dict, Any, Optional
 
 class MainAPI:
-    """メインAPIインターフェース（シグネチャのみ）"""
+    """Main API interface (signature only)"""
     
     def __init__(self, dependencies: Optional[Dict[str, Any]] = None):
         """
-        API初期化
+        API initialization
         
         Args:
-            dependencies: テスト用の依存関係注入
+            dependencies: Dependency injection for testing
         """
         self.dependencies = dependencies or {}
         self.service = MainService(
@@ -173,36 +176,36 @@ class MainAPI:
     
     def process_main_feature(self, input_data: InputModel) -> OutputModel:
         """
-        メイン機能のAPIエンドポイント - TODO: 実装予定
+        Main feature API endpoint - TODO: Implementation pending
         
         Args:
-            input_data: 入力データ（InputModel または dict）
+            input_data: Input data (InputModel or dict)
             
         Returns:
-            OutputModel: 処理結果
+            OutputModel: Processing result
         """
         try:
-            # 入力データの正規化
+            # Input data normalization
             if isinstance(input_data, dict):
                 input_data = InputModel(**input_data)
             
-            # Red Phase: 最小限の処理
-            # 実際の処理は後で実装
+            # Red Phase: Minimal processing
+            # Actual processing to be implemented later
             result = OutputModel(
-                status="error",  # わざと失敗
+                status="error",  # Intentionally failing
                 error_message="API implementation pending"
             )
             
             return result
             
         except ValueError as e:
-            # バリデーションエラー
+            # Validation error
             return OutputModel(
                 status="error",
                 error_message=f"Validation error: {str(e)}"
             )
         except Exception as e:
-            # システムエラー
+            # System error
             return OutputModel(
                 status="error", 
                 error_message=f"System error: {str(e)}"
@@ -219,14 +222,14 @@ try:
         request: InputModel,
         api: MainAPI = Depends()
     ) -> OutputModel:
-        """FastAPI エンドポイント"""
+        """FastAPI endpoint"""
         result = api.process_main_feature(request)
         if result.status == "error":
             raise HTTPException(status_code=400, detail=result.error_message)
         return result
         
 except ImportError:
-    # FastAPI が利用できない環境では無視
+    # Ignore in environments where FastAPI is not available
     pass
 ```
 
@@ -235,31 +238,31 @@ except ImportError:
 #### ディレクトリ構造作成
 ```python
 # src/__init__.py
-"""メインパッケージ"""
+"""Main package"""
 __version__ = "0.1.0"
 
 # src/models/__init__.py
-"""データモデル層"""
+"""Data model layer"""
 from .input_model import InputModel
 from .output_model import OutputModel, ProcessedData
 
 __all__ = ["InputModel", "OutputModel", "ProcessedData"]
 
 # src/repository/__init__.py
-"""データアクセス層"""
+"""Data access layer"""
 from .base_repository import BaseRepository
 from .data_repository import DataRepository
 
 __all__ = ["BaseRepository", "DataRepository"]
 
 # src/service/__init__.py
-"""ビジネスロジック層"""
+"""Business logic layer"""
 from .main_service import MainService
 
 __all__ = ["MainService"]
 
 # src/api/__init__.py
-"""APIインターフェース層"""
+"""API interface layer"""
 from .main_api import MainAPI
 
 __all__ = ["MainAPI"]
@@ -273,21 +276,21 @@ from pathlib import Path
 from typing import Optional
 
 class Settings(BaseSettings):
-    """アプリケーション設定"""
+    """Application settings"""
     
-    # データ関連
+    # Data related
     data_dir: Path = Path("data")
     output_dir: Path = Path("output")
     
-    # ログ設定
+    # Log settings
     log_level: str = "INFO"
     log_format: str = "json"
     
-    # API設定
+    # API settings
     api_host: str = "localhost"
     api_port: int = 8000
     
-    # 外部サービス
+    # External services
     external_service_url: Optional[str] = None
     external_service_timeout: int = 30
     
@@ -295,7 +298,7 @@ class Settings(BaseSettings):
         env_file = ".env"
         env_file_encoding = "utf-8"
 
-# 設定インスタンス
+# Settings instance
 settings = Settings()
 ```
 
@@ -303,48 +306,48 @@ settings = Settings()
 
 ### 型チェック実行
 ```bash
-# 型安全性確認
+# Type safety verification
 uv run --frozen pyright src/
 
-# 期待結果: エラーなし（型定義が正しい）
+# Expected result: No errors (correct type definitions)
 ```
 
 ### リント・フォーマット
 ```bash
-# コード品質チェック
+# Code quality check
 uv run --frozen ruff check src/
 uv run --frozen ruff format src/
 
-# 期待結果: リントエラーなし
+# Expected result: No lint errors
 ```
 
 ### Red Phase確認
 ```bash
-# 受け入れテスト実行（失敗するはず）
+# Acceptance test execution (should fail)
 uv run --frozen pytest tests/acceptance/ -v
 
-# 期待結果: ほとんどのテストが失敗
-# - NotImplementedError または
-# - 期待値と異なる結果による assertion error
+# Expected result: Most tests should fail
+# - NotImplementedError or
+# - Assertion error due to unexpected results
 ```
 
 ### インポート・基本動作確認
 ```python
 # tests/test_signatures.py
 def test_basic_imports():
-    """基本的なインポートが動作することを確認"""
+    """Verify that basic imports work"""
     from src.models.input_model import InputModel
     from src.models.output_model import OutputModel
     from src.api.main_api import MainAPI
     
-    # 基本的なインスタンス作成
+    # Basic instance creation
     input_data = InputModel(field1="test", field2=1, field3=["item"])
     api = MainAPI()
     
-    # 基本的な実行（失敗はするが例外は発生しない）
+    # Basic execution (will fail but no exceptions)
     result = api.process_main_feature(input_data)
     assert isinstance(result, OutputModel)
-    assert result.status == "error"  # Red Phase なので失敗
+    assert result.status == "error"  # Should fail in Red Phase
 ```
 
 ## 品質保証チェックリスト
