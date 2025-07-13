@@ -1,25 +1,48 @@
 #!/usr/bin/env python3
 """
-v3プロジェクト企画フェーズのスラッシュコマンド生成スクリプト
+複数テンプレート対応スラッシュコマンド生成スクリプト
 
 YAMLの設定ファイルとJinjaテンプレートから統一されたスラッシュコマンドを生成します。
+複数のテンプレート+設定ペアを扱えます。
 """
 
 import yaml
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pathlib import Path
+import argparse
 
 
 def main():
     """メイン実行関数"""
+    parser = argparse.ArgumentParser(
+        description="複数テンプレート対応スラッシュコマンド生成スクリプト"
+    )
+    
+    parser.add_argument(
+        "template_dir",
+        nargs="?",
+        default="v3",
+        help="使用するテンプレートディレクトリ名（デフォルト: v3）"
+    )
+    
+    args = parser.parse_args()
     
     # ファイルパスの設定
     script_dir = Path(__file__).parent
-    config_file = script_dir / "config.yaml"
-    template_file = script_dir / "template.md"
+    config_file = script_dir / "configs" / args.template_dir / "config.yaml"
+    template_file = script_dir / "templates" / args.template_dir / "template.md"
+    
+    # ファイル存在確認
+    if not config_file.exists():
+        print(f"✗ エラー: 設定ファイルが見つかりません: {config_file}")
+        return
+    
+    if not template_file.exists():
+        print(f"✗ エラー: テンプレートファイルが見つかりません: {template_file}")
+        return
     
     # 設定ファイルの読み込み
-    print("設定ファイルを読み込み中...")
+    print(f"設定ファイルを読み込み中... ({config_file})")
     with open(config_file, 'r', encoding='utf-8') as f:
         config = yaml.safe_load(f)
     
@@ -27,21 +50,21 @@ def main():
     output_dir = script_dir.parent / config['common']['commands_output_dir']
     
     # Jinjaテンプレートの設定
-    print("テンプレートを設定中...")
+    print(f"テンプレートを設定中... ({template_file})")
     env = Environment(
-        loader=FileSystemLoader(script_dir),
+        loader=FileSystemLoader(template_file.parent),
         autoescape=select_autoescape(['html', 'xml']),
         trim_blocks=True,
         lstrip_blocks=True
     )
     
-    template = env.get_template("template.md")
+    template = env.get_template(template_file.name)
     
     # 出力ディレクトリの作成
     output_dir.mkdir(parents=True, exist_ok=True)
     
     # 各ステップのコマンドを生成
-    print("コマンドファイル生成中...")
+    print(f"コマンドファイル生成中... (テンプレートディレクトリ: {args.template_dir})")
     step_references = config['step_references']
     
     for step_id in step_references.keys():
