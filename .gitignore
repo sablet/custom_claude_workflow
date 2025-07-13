@@ -2,3 +2,7 @@ ide/
 projects/
 statsig/
 todos/
+output/
+local/
+.specstory/
+shell-snapshots

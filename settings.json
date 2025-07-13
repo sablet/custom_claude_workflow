@@ -32,22 +32,12 @@
       "Bash(whoami*)",
       "Bash(pwd*)",
       "Bash(cd*)",
-      "Read(~/.bashrc)",
-      "Read(~/.zshrc)",
-      "Read(~/.gitconfig)",
-      "Read(pyproject.toml)",
-      "Read(requirements*.txt)",
-      "Read(.env*)",
-      "Read(Dockerfile*)",
-      "Read(.github/workflows/*)",
-      "Read(ruff.toml)",
-      "Read(.ruff.toml)",
-      "Read(setup.py)",
-      "Read(pytest.ini)"
+      "Read(*)"
     ],
     "deny": [
       "Bash(sudo *)",
-      "Bash(rm -rf /)"
+      "Bash(rm -rf /)",
+      "Read(.env)"
     ]
   },
   "env": {
