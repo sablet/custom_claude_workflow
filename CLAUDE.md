@@ -5,114 +5,13 @@
 ### 基本構造
 カスタムコマンドは Markdown ファイル（.md）で作成し、YAMLフロントマターでメタデータを設定。
 
-### 個人用コマンド (`~/.claude/commands/`)
-`/user:` プレフィックスで呼び出し
-
-#### セキュリティレビューコマンド例
-ファイル: `~/.claude/commands/v1/security-review.md`
-```markdown
----
-allowed-tools: ["Read", "Grep", "Bash"]
-description: "コードのセキュリティ脆弱性をレビュー"
----
-
-# セキュリティ脆弱性レビュー
-
-## コンテキスト取得
-!git log -n 5
-!git status
-
-## レビュー対象
-@src/security/$ARGUMENTS
-
-以下の観点でセキュリティレビューを実行:
-- SQL インジェクション脆弱性
-- XSS 脆弱性チェック
-- 認証・認可の実装確認
-- 機密情報の適切な取り扱い
-- 入力値検証の実装状況
-```
-
-使用例: `/user:security-review authentication.js`
-
-### プロジェクト用コマンド (`.claude/commands/`)
-`/project:` プレフィックスで呼び出し
-
-#### パフォーマンス最適化コマンド例
-ファイル: `.claude/commands/v1/optimize.md`
-```markdown
----
-allowed-tools: ["Bash", "Read", "Edit"]
-description: "コードのパフォーマンス分析と最適化提案"
----
-
-# パフォーマンス分析・最適化
-
-## 現在の変更状況
-!git diff HEAD
-
-## 分析対象
-@src/performance/$ARGUMENTS
-
-以下の観点で分析:
-- アルゴリズム計算量
-- メモリ使用量
-- ボトルネック特定
-- 最適化提案
-```
-
-### 名前空間を使用した階層化コマンド
-
-#### フロントエンド専用コマンド
-ファイル: `.claude/commands/v1/frontend/component-audit.md`
-```markdown
----
-description: "React コンポーネントのベストプラクティス監査"
----
-
-# React コンポーネント監査
-
-## 対象コンポーネント
-@src/components/$ARGUMENTS
-
-監査項目:
-- パフォーマンス最適化（memo, useMemo, useCallback）
-- アクセシビリティ準拠
-- 状態管理パターン
-- Props の型定義
-- テストカバレッジ
-```
-
-使用例: `/project:frontend:component-audit LoginForm.tsx`
-
-#### バックエンド専用コマンド
-ファイル: `.claude/commands/v1/backend/api-review.md`
-```markdown
----
-allowed-tools: ["Read", "Grep", "Bash"]
-description: "API エンドポイントのレビュー"
----
-
-# API エンドポイントレビュー
-
-## API 仕様確認
-@src/api/$ARGUMENTS
-
-レビュー項目:
-- エラーハンドリング
-- レート制限実装
-- 認証・認可チェック
-- バリデーション実装
-- ログ出力適切性
-```
-
 ## カスタムコマンドの機能
 
 ### 利用可能な構文
 - `!command`: Bashコマンド実行
 - `@path/to/file`: ファイル参照
 - `$ARGUMENTS`: 動的引数置換
-- 名前空間: `/user:category:subcategory:command`
+- 名前空間: `/user:category:command`
 
 ### YAMLフロントマター設定項目
 - `allowed-tools`: 使用可能ツールの制限
@@ -200,11 +99,6 @@ project/
 
 #### 出力先の分類と使用例
 ```bash
-# ドキュメント生成
-output/docs/仕様書-YYYYMMDD.md
-output/docs/設計書-YYYYMMDD.md
-output/docs/受け入れテスト基準-YYYYMMDD.md
-
 # レポート生成
 output/reports/分析レポート-YYYYMMDD.html
 output/reports/セキュリティレポート-YYYYMMDD.html
@@ -225,14 +119,13 @@ output/artifacts/データベーススキーマ.sql
 ```
 
 #### 必須の出力パターン
-- **ファイル命名**: `[種類]-[YYYYMMDD-HHMMSS].[拡張子]` 形式
 - **ディレクトリ作成**: 出力前に必要なサブディレクトリを作成
 - **gitignore**: `output/` ディレクトリを適切に管理（必要に応じて除外）
 
 #### 出力前のディレクトリ確認例
 ```bash
 # outputディレクトリ構造の確認・作成
-mkdir -p output/{docs,reports,data,logs,artifacts}
+mkdir -p output/{reports,data,logs,artifacts}
 
 # 生成前の確認
 ls -la output/
@@ -304,10 +197,6 @@ repos:
 
 ### 個人的な開発方針
 
-#### セキュリティファースト
-- 防御的セキュリティタスクに特化
-- 脆弱性検出・分析ツールの積極活用
-- セキュアコーディングガイドラインの遵守
 - **冗長性の最小化**: 必要性が高い場合を除いて冗長な記述は避ける
 - **README記述の制限**: ユーザーからの明示的な指示がない限り、`README.md` を記述してはならない。
 
@@ -317,30 +206,6 @@ repos:
 - ファイル操作: Read → Edit/MultiEdit → Write
 - **冗長性の最小化**: 必要性が高い場合を除いて冗長な記述は避ける
 
-### アーキテクチャ変更管理
-**CRITICAL**: 編集作業後にアーキテクチャの状態が変更される場合は、必ず `.claude/architecture.md` を更新してください。また、作業開始前にこのファイルを確認してから作業に入ってください。
-
-#### 必須のアーキテクチャ管理フロー
-```bash
-# 1. 作業開始前: アーキテクチャ状態の確認
-!test -f .claude/architecture.md && echo "アーキテクチャファイル存在" || echo "アーキテクチャファイル未作成"
-![ -f .claude/architecture.md ] && cat .claude/architecture.md
-
-# 2. 編集作業実施
-# [実際の編集作業]
-
-# 3. 作業完了後: アーキテクチャ変更の確認と更新
-# 以下のような変更がある場合は .claude/architecture.md を更新:
-# - 新しいコンポーネント・モジュールの追加
-# - 既存コンポーネント間の依存関係の変更
-# - レイヤード設計の構造変更
-# - API インターフェースの変更
-# - データフローの変更
-# - 設計パターンの変更
-
-# アーキテクチャファイルの参照例
-@.claude/architecture.md
-```
 
 #### アーキテクチャファイルの記載内容
 - **システム全体構成**: 主要コンポーネントと役割
