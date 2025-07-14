@@ -15,14 +15,7 @@ step_references:
 common:
   base_tools: ["Read", "Write", "Edit", "Bash"]
   output_path: "docs/planning_v3/"
-  commands_output_dir: "commands/v3"
-  
-  # 共通の対話ポイント
-  common_interaction_points: |
-    - ユーザーの入力負荷を軽減するため、選択肢形式での質問を優先してください
-    - 複数の質問がある場合は、必ず一つずつ順番に処理してください
-    - 曖昧な回答には具体例を提示して明確化を図ってください
-    - ユーザーの理解レベルや経験に合わせた現実的な提案を行ってください
+  commands_output_dir: "commands/development_planning_v3"
 
 # 個別要素（step別に比較可能な構造）
 individual_elements:
@@ -257,9 +250,9 @@ sequential_questioning:
     3. {option3_description}
     4. その他（具体的に記入：_______）
 
-    ```
-    User: 回答例: 2
     ---
+    User: 回答例: 2
+    ```
 
 # 次ステップガイド設定
 next_step_guidance:
