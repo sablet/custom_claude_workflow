@@ -15,22 +15,22 @@ import argparse
 def main():
     """メイン実行関数"""
     parser = argparse.ArgumentParser(
-        description="複数テンプレート対応スラッシュコマンド生成スクリプト"
+        description="Universal template対応スラッシュコマンド生成スクリプト"
     )
     
     parser.add_argument(
-        "template_dir",
+        "config_name",
         nargs="?",
-        default="v3",
-        help="使用するテンプレートディレクトリ名（デフォルト: v3）"
+        default="software-dev",
+        help="使用する設定名（デフォルト: software-dev）"
     )
     
     args = parser.parse_args()
     
     # ファイルパスの設定
     script_dir = Path(__file__).parent
-    config_file = script_dir / "configs" / args.template_dir / "config.yaml"
-    template_file = script_dir / "templates" / args.template_dir / "template.md"
+    config_file = script_dir / "configs" / f"{args.config_name}.yaml"
+    template_file = script_dir / "templates" / "universal-template.md"
     
     # ファイル存在確認
     if not config_file.exists():
@@ -64,7 +64,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     
     # 各ステップのコマンドを生成
-    print(f"コマンドファイル生成中... (テンプレートディレクトリ: {args.template_dir})")
+    print(f"コマンドファイル生成中... (設定: {args.config_name})")
     step_references = config['step_references']
     
     for step_id in step_references.keys():

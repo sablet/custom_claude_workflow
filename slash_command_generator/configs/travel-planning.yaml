@@ -1,0 +1,254 @@
+# 旅行プランニング コマンド設定ファイル
+
+# ステップ参照用の正式名称定義（表記揺れ防止）
+step_references:
+  plan-concept: "旅行コンセプト策定"
+  plan-destination: "目的地・予算設定"
+  plan-itinerary: "詳細行程計画"
+  plan-booking: "予約・手配計画"
+  plan-preparation: "準備・持ち物リスト"
+
+# 共通要素定義
+common:
+  base_tools: ["Read", "Write", "Edit", "Bash"]
+  output_path: "docs/travel_planning/"
+  commands_output_dir: "commands/travel_planning"
+
+# 個別要素（step別に比較可能な構造）
+individual_elements:
+  description:
+    plan-concept: "旅行の目的とコンセプトの明確化"
+    plan-destination: "目的地選定と予算設定"
+    plan-itinerary: "詳細な日程・行程の計画"
+    plan-booking: "宿泊・交通・アクティビティの予約計画"
+    plan-preparation: "出発準備と持ち物チェックリスト作成"
+
+  overview:
+    plan-concept: |
+      この手順では、旅行の **なぜ行くのか** という動機と、**どんな旅行にしたいか** というコンセプトを明確にします。
+      旅行の目的、スタイル、重視したいポイントを整理し、計画全体の方向性を決定します。
+    plan-destination: |
+      旅行のコンセプトを基に、**具体的な目的地の選定**と**現実的な予算設定**を行います。
+      複数の候補地を比較検討し、予算との兼ね合いで最適な選択を決定します。
+    plan-itinerary: |
+      選定した目的地での**具体的な日程・行程**を計画します。
+      観光スポット、移動手段、食事、休憩時間などを考慮した実現可能なスケジュールを作成します。
+    plan-booking: |
+      決定した行程に基づいて、**宿泊施設、交通手段、アクティビティの予約計画**を立てます。
+      予約の優先順位、締切、代替案などを整理し、効率的な手配を進められるよう準備します。
+    plan-preparation: |
+      旅行出発に向けた**具体的な準備作業と持ち物リスト**を作成します。
+      必要な手続き、荷造りのポイント、現地で必要なものを整理し、忘れ物のない準備を目指します。
+
+  dependencies_check:
+    plan-concept: []
+    plan-destination: ["plan-concept"]
+    plan-itinerary: ["plan-concept", "plan-destination"]
+    plan-booking: ["plan-destination", "plan-itinerary"]
+    plan-preparation: ["plan-itinerary", "plan-booking"]
+
+  specific_questions:
+    plan-concept:
+      - "今回の旅行の主な目的は何ですか？（リラックス、観光、体験、学習など）"
+      - "どんな旅行スタイルを希望していますか？（のんびり、アクティブ、文化重視など）"
+      - "旅行で最も重視したいことは何ですか？"
+      - "避けたいこと、苦手なことはありますか？"
+      - "一緒に行く人はいますか？その人の希望も考慮する必要がありますか？"
+      - "旅行の期間はどの程度を想定していますか？"
+    plan-destination:
+      - "希望する地域や国はありますか？"
+      - "予算の上限はどの程度ですか？"
+      - "旅行時期はいつ頃を予定していますか？"
+      - "気候や季節に対する希望はありますか？"
+      - "言語や文化の違いに対する不安はありますか？"
+      - "パスポートやビザの準備状況はどうですか？"
+    plan-itinerary:
+      - "1日の活動時間はどの程度を想定していますか？"
+      - "必ず訪れたい場所や体験したいことはありますか？"
+      - "移動手段に対する希望や制約はありますか？"
+      - "食事に対するこだわりや制限はありますか？"
+      - "休憩や自由時間をどの程度確保したいですか？"
+    plan-booking:
+      - "宿泊施設に対する希望や条件はありますか？"
+      - "交通手段の予約はいつ頃から可能ですか？"
+      - "事前予約が必要なアクティビティはありますか？"
+      - "キャンセルポリシーや変更の可能性を考慮する必要がありますか？"
+      - "予約の優先順位をどう考えていますか？"
+    plan-preparation:
+      - "持参したい特別なものはありますか？"
+      - "現地で購入予定のものはありますか？"
+      - "健康面で気をつけることはありますか？"
+      - "緊急時の連絡先や保険の準備はできていますか？"
+      - "出発前に完了すべき手続きはありますか？"
+
+  dependencies_from_to:
+    plan-concept:
+      from: "なし（旅行計画の起点）"
+      to: ["plan-destination", "plan-itinerary"]
+    plan-destination:
+      from: ["plan-concept"]
+      to: ["plan-itinerary", "plan-booking"]
+    plan-itinerary:
+      from: ["plan-concept", "plan-destination"]
+      to: ["plan-booking", "plan-preparation"]
+    plan-booking:
+      from: ["plan-destination", "plan-itinerary"]
+      to: ["plan-preparation"]
+    plan-preparation:
+      from: ["plan-itinerary", "plan-booking"]
+      to: ["旅行実行"]
+
+  interaction_points:
+    plan-concept: |
+      - **旅行の本質的な目的の抽出が最重要**: 「なんとなく行きたい」ではなく、具体的な動機や期待を明確化してください
+      - 複数の目的がある場合は、優先順位をつけて整理してください
+      - **予算や期間の詳細はplan-destinationで扱う**: ここでは大まかなイメージに留めてください
+    plan-destination: |
+      - 予算が曖昧な場合は、具体的な金額範囲を設定してもらってください
+      - 複数の候補地がある場合は、比較検討の基準を明確にしてください
+      - 現実的な制約（時間、予算、手続き）を十分に考慮した提案を行ってください
+    plan-itinerary: |
+      - 詰め込みすぎない現実的なスケジュールを心がけてください
+      - 移動時間や休憩時間を十分に考慮してください
+      - 天候やトラブルに対応できる柔軟性を持たせてください
+    plan-booking: |
+      - 予約の締切や条件を明確に確認してください
+      - 代替案やキャンセル時の対応も検討してください
+      - 予算内での最適な選択肢を提案してください
+    plan-preparation: |
+      - 季節や気候に応じた具体的なアドバイスを提供してください
+      - 忘れがちな項目（充電器、薬など）も含めた包括的なリストを作成してください
+      - 現地の文化や習慣に配慮した準備項目も含めてください
+
+# 全体フェーズ構造定義
+phase_structure:
+  enable_overview: true
+  show_on_steps: ["plan-concept"]
+  
+  phases:
+    phase1:
+      title: "Phase 1: 旅行企画フェーズ"
+      description: "旅行の目的とコンセプトを明確化し、目的地と予算を決定"
+      steps:
+        - id: "plan-concept"
+          filename: "plan-concept.md"
+          description: "旅行コンセプト策定"
+        - id: "plan-destination"
+          filename: "plan-destination.md"
+          description: "目的地・予算設定"
+    
+    phase2:
+      title: "Phase 2: 詳細計画フェーズ"
+      description: "具体的な行程と予約計画を策定"
+      steps:
+        - id: "plan-itinerary"
+          filename: "plan-itinerary.md"
+          description: "詳細行程計画"
+        - id: "plan-booking"
+          filename: "plan-booking.md"
+          description: "予約・手配計画"
+    
+    phase3:
+      title: "Phase 3: 準備フェーズ"
+      description: "出発に向けた具体的な準備を完了"
+      steps:
+        - id: "plan-preparation"
+          filename: "plan-preparation.md"
+          description: "準備・持ち物リスト"
+
+# 段階的質問処理原則
+sequential_questioning:
+  principle: |
+    **複数の質問がある場合の処理原則**：
+    複数の項目について確認が必要な場合は、必ず一つずつ順番に処理し、各質問の回答を確認してから次の質問に進む。一度に全ての質問を提示することは避け、段階的なアプローチを取る。
+  
+  template_format: |
+    ```
+    [{purpose}]のため、まず最初の項目について番号で選択してください：
+
+    ## {item_title}
+    以下から該当するものを選んでください（複数選択可）：
+    1. {option1_description}
+    2. {option2_description}
+    3. {option3_description}
+    4. その他（具体的に記入：_______）
+    ---
+    User: 回答例: 1, 3
+    （{item_title}の回答を確認後、次の項目について質問）
+
+    ---
+
+    ## {next_item_title}
+    以下から最も近いものを選んでください：
+    1. {option1_description}
+    2. {option2_description}
+    3. {option3_description}
+    4. その他（具体的に記入：_______）
+
+    ---
+    User: 回答例: 2
+    ```
+
+# 次ステップガイド設定
+next_step_guidance:
+  enable: true
+  guidance_instruction: |
+    ### 🚀 次のステップガイド
+    
+    このステップで収集・整理した情報を基に、次の候補ステップを提案してください：
+    
+    **ガイド原則**:
+    - 今回の成果物の内容に基づいて適切な次ステップを提案
+    - 不要と思われるステップには理由とともにスキップ提案
+    - 各候補ステップで何をするかを簡潔に説明
+    - 実行コマンドを明示
+    - 最終的な選択はユーザーに委ねる
+    
+    **スキップ判断基準例**:
+    - 短期間の旅行 → plan-itineraryを簡略化してplan-bookingへ
+    - 国内旅行 → ビザ関連の準備をスキップ
+    - 単純な旅行 → plan-bookingを簡略化してplan-preparationへ
+
+# 特別な処理要素
+special_processes:
+  plan-concept:
+    core_concept_extraction: |
+      ### 3. 旅行コンセプトの抽出と確認
+      収集した情報から、まず**この旅行の本質を一行で表現**してください：
+      
+      ```
+      まず、この旅行の本質を一言で表すとどのようなものでしょうか？
+      数フレーズ程度（最大でも140文字以内）で、「どんな旅行なのか」の核心部分を教えてください。
+      ※具体的な場所や詳細はplan-destinationで扱うため、ここでは旅行の本質のみに集中してください。
+      
+      例：
+      - 心身リフレッシュのための温泉旅行
+      - 歴史と文化を学ぶ教育的な旅行
+      - 家族との絆を深める記念旅行
+      - 新しい体験を求める冒険旅行
+      - グルメを楽しむ食べ歩き旅行
+      ```
+  
+  plan-destination:
+    destination_comparison: |
+      ### 3. 目的地比較検討
+      **複数候補がある場合の比較検討:**
+      ```
+      目的地選定のため、まず最初の項目について詳しく教えてください：
+      
+      ## 予算設定
+      - 総予算の上限はいくらぐらいですか？
+      - 交通費、宿泊費、食事代、観光費の配分はどう考えていますか？
+      
+      （回答を確認後、次の項目について質問を続ける）
+      
+      ## 候補地の比較
+      - 現在考えている候補地を教えてください
+      - それぞれの魅力や懸念点は何ですか？
+      
+      （回答を確認後、次の項目について質問を続ける）
+      
+      ## 制約条件の確認
+      - 旅行時期に制約はありますか？
+      - パスポート・ビザの準備状況はどうですか？
+      ```
