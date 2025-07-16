@@ -200,6 +200,52 @@ repos:
 - **冗長性の最小化**: 必要性が高い場合を除いて冗長な記述は避ける
 - **README記述の制限**: ユーザーからの明示的な指示がない限り、`README.md` を記述してはならない。
 
+### MCPツールの管理
+
+#### MCPサーバーの追加・削除
+```bash
+# ローカルスコープ（デフォルト）: プロジェクト専用
+claude mcp add <name> <command>
+
+# プロジェクトスコープ: .mcp.jsonで共有
+claude mcp add -s project <name> <command>
+
+# ユーザースコープ: 全プロジェクトで利用可能
+claude mcp add -s user <name> <command>
+
+# 環境変数付きでサーバー追加
+claude mcp add -e KEY=value <name> <command>
+
+# SSE/HTTPサーバーの追加
+claude mcp add --transport sse <name> <url>
+claude mcp add --transport http <name> <url>
+```
+
+#### MCPサーバーの管理・確認
+```bash
+# サーバー一覧表示
+claude mcp list
+
+# 特定サーバーの詳細確認
+claude mcp get <server-name>
+
+# サーバーの削除
+claude mcp remove <server-name>
+
+# 認証管理（セッション内）
+/mcp
+```
+
+#### MCPスコープ選択指針
+- **local**: 実験的・一時的なツール、プロジェクト固有の機能
+- **project**: チーム共有、プロジェクト必須のツール
+- **user**: 汎用的で頻繁に使用するツール
+
+#### セキュリティ重要事項
+- **第三者MCPサーバー**: 信頼できるソースのみ使用
+- **認証情報**: 環境変数で機密情報を管理
+- **スコープ選択**: 最小権限の原則に従ったスコープ設定
+
 ### 効率的なツール使用
 - **並行実行を優先**: 複数のBashコマンドは同時実行
 - **検索順序**: Task → Grep → Glob

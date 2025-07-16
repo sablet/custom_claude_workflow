@@ -1,32 +1,31 @@
 ---
-allowed-tools: ["Read", "Write", "Edit", "Bash"]
-description: "旅行の目的とコンセプトの明確化"
----# 旅行コンセプト策定
+allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "WebFetch"]
+description: "旅行コンセプト策定と候補地・候補日時の範囲絞込み"
+---# 旅行企画・候補絞込み
 
 プロジェクトID: $ARGUMENTS
 
 ## 概要
-この手順では、旅行の **なぜ行くのか** という動機と、**どんな旅行にしたいか** というコンセプトを明確にします。
-旅行の目的、スタイル、重視したいポイントを整理し、計画全体の方向性を決定します。
+この手順では、旅行の **なぜ行くのか** という動機と **どんな旅行にしたいか** というコンセプトを明確化し、
+**候補地（2-4箇所程度）** と **候補日時の範囲** を絞り込みます。
+最終決定はせず、次ステップで具体調査する対象の範囲を設定することが目的です。
 
 
 ## プロジェクト全体構想
 
 この手順は以下の全体的なフェーズ構造の一部です：
 
-### Phase 1: 旅行企画フェーズ
-旅行の目的とコンセプトを明確化し、目的地と予算を決定
-- **🎯 docs/travel_planning//$ARGUMENTS/plan-concept.md** # 旅行コンセプト策定 ← **現在のステップ**
-- docs/travel_planning//$ARGUMENTS/plan-destination.md # 目的地・予算設定
+### Phase 1: 旅行企画・候補絞込み
+旅行コンセプトを策定し、候補地・候補日時を範囲指定
+- **🎯 /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase1-step1.md** # 旅行企画・候補絞込み ← **現在のステップ**
 
-### Phase 2: 詳細計画フェーズ
-具体的な行程と予約計画を策定
-- docs/travel_planning//$ARGUMENTS/plan-itinerary.md # 詳細行程計画
-- docs/travel_planning//$ARGUMENTS/plan-booking.md # 予約・手配計画
+### Phase 2: 複数ケース具体調査
+各候補での予約可能性を調査し、最終決定・予約実行
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step1.md # 複数ケース具体調査
 
-### Phase 3: 準備フェーズ
-出発に向けた具体的な準備を完了
-- docs/travel_planning//$ARGUMENTS/plan-preparation.md # 準備・持ち物リスト
+### Phase 3: 詳細準備工程
+予約確定後の実行準備と最終チェック
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step1.md # 詳細準備工程
 
 
 **複数の質問がある場合の処理原則**：
@@ -39,8 +38,8 @@ description: "旅行の目的とコンセプトの明確化"
 
 実際の作成済みファイル一覧
 ```bash
-!mkdir -p docs/travel_planning//$ARGUMENTS
-!tree -L 2 docs/travel_planning//$ARGUMENTS | ls -l docs/travel_planning//$ARGUMENTS
+!mkdir -p /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS
+!tree -L 2 /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS | ls -l /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS
 ```
 
 ### 2. 依存関係の確認
@@ -49,7 +48,7 @@ description: "旅行の目的とコンセプトの明確化"
 
 
 - **依存元**: なし（旅行計画の起点）
-- **依存先**: 目的地・予算設定、詳細行程計画
+- **依存先**: 複数ケース具体調査
 ### 3. 情報収集と質問
 
 **対話原則：**
@@ -92,7 +91,13 @@ User: 回答例: 2
 - 旅行で最も重視したいことは何ですか？
 - 避けたいこと、苦手なことはありますか？
 - 一緒に行く人はいますか？その人の希望も考慮する必要がありますか？
-- 旅行の期間はどの程度を想定していますか？
+- 希望する宿泊施設のタイプはありますか？（高級ホテル、ビジネスホテル、旅館、民宿、ゲストハウス、リゾートホテル、温泉宿など）
+- 宿泊施設で重視したいポイントは何ですか？（立地・アクセス、価格、設備・アメニティ、サービス品質、雰囲気・コンセプト、食事内容など）
+- 希望する移動手段はありますか？（飛行機、新幹線・特急、高速バス、自家用車・レンタカー、船・フェリー、現地交通手段など）
+- 移動手段で重視したいポイントは何ですか？（価格・コスト、移動時間・速度、快適性、利便性・アクセス、景色・体験、環境負荷など）
+- 候補となる地域や国はありますか？（2-4箇所程度に絞り込み）
+- 候補となる時期・期間はいつ頃ですか？（範囲で指定）
+- 予算の大まかな上限はどの程度ですか？
 
 
 ### 3. 旅行コンセプトの抽出と確認
@@ -101,7 +106,7 @@ User: 回答例: 2
 ```
 まず、この旅行の本質を一言で表すとどのようなものでしょうか？
 数フレーズ程度（最大でも140文字以内）で、「どんな旅行なのか」の核心部分を教えてください。
-※具体的な場所や詳細はplan-destinationで扱うため、ここでは旅行の本質のみに集中してください。
+※具体的な場所や詳細はphase1-step2で扱うため、ここでは旅行の本質のみに集中してください。
 
 例：
 - 心身リフレッシュのための温泉旅行
@@ -117,12 +122,13 @@ User: 回答例: 2
 
 ### 5. 最終確認とドキュメント作成
 
-承認された内容を @docs/travel_planning//$ARGUMENTS/plan-concept.md に出力してください
+承認された内容を @/Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase1-step1.md に出力してください
 
 ## 重要な対話ポイント
 - **旅行の本質的な目的の抽出が最重要**: 「なんとなく行きたい」ではなく、具体的な動機や期待を明確化してください
-- 複数の目的がある場合は、優先順位をつけて整理してください
-- **予算や期間の詳細はplan-destinationで扱う**: ここでは大まかなイメージに留めてください
+- **候補地は2-4箇所程度に絞込み**: 多すぎると次ステップでの調査が困難、少なすぎると選択肢が不足
+- **候補日時は範囲指定**: 「3月中旬〜4月上旬」「夏休み期間」など、柔軟性を保った設定
+- **最終決定はしない**: 次ステップでの具体調査に必要な範囲設定に留める
 
 
 
@@ -139,7 +145,7 @@ User: 回答例: 2
 - 最終的な選択はユーザーに委ねる
 
 **スキップ判断基準例**:
-- 短期間の旅行 → plan-itineraryを簡略化してplan-bookingへ
-- 国内旅行 → ビザ関連の準備をスキップ
-- 単純な旅行 → plan-bookingを簡略化してplan-preparationへ
+- 短期間・単純な旅行 → phase3-step1（詳細準備工程）をスキップ
+- 慣れた目的地・国内旅行 → phase3-step1を簡略化
+- 海外・長期・特殊な旅行 → 全ステップ実行推奨
 

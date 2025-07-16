@@ -14,8 +14,8 @@ step_references:
 # 共通要素定義
 common:
   base_tools: ["Read", "Write", "Edit", "Bash"]
-  output_path: "docs/planning_v3/"
-  commands_output_dir: "commands/development_planning_v3"
+  output_path: "~/Documents/planning_docs/development_planning_v3/"
+  commands_output_dir: "~/.claude/commands/development_planning_v3"
 
 # 個別要素（step別に比較可能な構造）
 individual_elements:
@@ -101,7 +101,6 @@ individual_elements:
       - "テスト環境やツールの制約はありますか？"
       - "品質基準や受け入れ条件は明確ですか？"
       - "どの機能を優先的にテストしたいですか？"
-      - "どの程度のテストカバレッジを目指しますか？"
     phase3-step2:
       - "技術スタックやアーキテクチャの制約はありますか？"
       - "開発チームのスキルレベルや経験はどうですか？"

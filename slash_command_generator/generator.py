@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 複数テンプレート対応スラッシュコマンド生成スクリプト
 
@@ -10,6 +9,7 @@ import yaml
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pathlib import Path
 import argparse
+import shutil
 
 
 def main():
@@ -46,8 +46,11 @@ def main():
     with open(config_file, 'r', encoding='utf-8') as f:
         config = yaml.safe_load(f)
     
-    # 出力ディレクトリの設定（script_dirからの相対パス）
-    output_dir = script_dir.parent / config['common']['commands_output_dir']
+    # output_pathのtilde展開処理
+    config['common']['output_path'] = str(Path(config['common']['output_path']).expanduser().resolve())
+    
+    # 出力ディレクトリの設定（tilde展開対応）
+    output_dir = Path(config['common']['commands_output_dir']).expanduser().resolve()
     
     # Jinjaテンプレートの設定
     print(f"テンプレートを設定中... ({template_file})")
@@ -60,8 +63,13 @@ def main():
     
     template = env.get_template(template_file.name)
     
-    # 出力ディレクトリの作成
+    # 出力ディレクトリの削除と再作成
+    if output_dir.exists():
+        print(f"既存の出力ディレクトリを削除中... ({output_dir})")
+        shutil.rmtree(output_dir)
+    
     output_dir.mkdir(parents=True, exist_ok=True)
+    print(f"出力ディレクトリを作成しました: {output_dir}")
     
     # 各ステップのコマンドを生成
     print(f"コマンドファイル生成中... (設定: {args.config_name})")

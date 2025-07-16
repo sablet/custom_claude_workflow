@@ -1,32 +1,30 @@
 ---
-allowed-tools: ["Read", "Write", "Edit", "Bash"]
-description: "詳細な日程・行程の計画"
----# 詳細行程計画
+allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "WebFetch"]
+description: "予約確定後の詳細準備工程と実行準備"
+---# 詳細準備工程
 
 プロジェクトID: $ARGUMENTS
 
 ## 概要
-選定した目的地での**具体的な日程・行程**を計画します。
-観光スポット、移動手段、食事、休憩時間などを考慮した実現可能なスケジュールを作成します。
+予約確定後の **詳細準備工程** を実施します。持ち物リストに加え、現地最新情報調査、
+手続き確認、緊急時対応計画、当日行動スケジュール詳細化など、実行成功のための最終準備を行います。
 
 
 ## プロジェクト全体構想
 
 この手順は以下の全体的なフェーズ構造の一部です：
 
-### Phase 1: 旅行企画フェーズ
-旅行の目的とコンセプトを明確化し、目的地と予算を決定
-- docs/travel_planning//$ARGUMENTS/plan-concept.md # 旅行コンセプト策定
-- docs/travel_planning//$ARGUMENTS/plan-destination.md # 目的地・予算設定
+### Phase 1: 旅行企画・候補絞込み
+旅行コンセプトを策定し、候補地・候補日時を範囲指定
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase1-step1.md # 旅行企画・候補絞込み
 
-### Phase 2: 詳細計画フェーズ
-具体的な行程と予約計画を策定
-- **🎯 docs/travel_planning//$ARGUMENTS/plan-itinerary.md** # 詳細行程計画 ← **現在のステップ**
-- docs/travel_planning//$ARGUMENTS/plan-booking.md # 予約・手配計画
+### Phase 2: 複数ケース具体調査
+各候補での予約可能性を調査し、最終決定・予約実行
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step1.md # 複数ケース具体調査
 
-### Phase 3: 準備フェーズ
-出発に向けた具体的な準備を完了
-- docs/travel_planning//$ARGUMENTS/plan-preparation.md # 準備・持ち物リスト
+### Phase 3: 詳細準備工程
+予約確定後の実行準備と最終チェック
+- **🎯 /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step1.md** # 詳細準備工程 ← **現在のステップ**
 
 
 **複数の質問がある場合の処理原則**：
@@ -39,8 +37,8 @@ description: "詳細な日程・行程の計画"
 
 実際の作成済みファイル一覧
 ```bash
-!mkdir -p docs/travel_planning//$ARGUMENTS
-!tree -L 2 docs/travel_planning//$ARGUMENTS | ls -l docs/travel_planning//$ARGUMENTS
+!mkdir -p /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS
+!tree -L 2 /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS | ls -l /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS
 ```
 
 ### 2. 依存関係の確認
@@ -48,8 +46,8 @@ description: "詳細な日程・行程の計画"
 依存元のドキュメントを確認してから次に進んでください
 
 
-- **依存元**: 旅行コンセプト策定、目的地・予算設定
-- **依存先**: 予約・手配計画、準備・持ち物リスト
+- **依存元**: 複数ケース具体調査
+- **依存先**: 
 ### 3. 情報収集と質問
 
 **対話原則：**
@@ -87,11 +85,11 @@ User: 回答例: 2
 
 
 **確認すべき項目：**
-- 1日の活動時間はどの程度を想定していますか？
-- 必ず訪れたい場所や体験したいことはありますか？
-- 移動手段に対する希望や制約はありますか？
-- 食事に対するこだわりや制限はありますか？
-- 休憩や自由時間をどの程度確保したいですか？
+- 現地の最新情報で特に確認したい項目はありますか？
+- 持参したい特別なものや制限のあるものはありますか？
+- 健康面・安全面で特に気をつけることはありますか？
+- 緊急時の連絡体制や保険の準備状況はどうですか？
+- 出発前に完了すべき手続きや準備はありますか？
 
 
 ### 4. 設計案の提示と承認
@@ -99,12 +97,13 @@ User: 回答例: 2
 
 ### 5. 最終確認とドキュメント作成
 
-承認された内容を @docs/travel_planning//$ARGUMENTS/plan-itinerary.md に出力してください
+承認された内容を @/Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step1.md に出力してください
 
 ## 重要な対話ポイント
-- 詰め込みすぎない現実的なスケジュールを心がけてください
-- 移動時間や休憩時間を十分に考慮してください
-- 天候やトラブルに対応できる柔軟性を持たせてください
+- **予約確定が前提**: Phase2で予約が完了していることを確認してから進める
+- **現地最新情報の重視**: 天気予報、交通情報、営業状況など、直近の情報を収集
+- **包括的な準備**: 持ち物だけでなく、手続き・連絡先・緊急時対応まで含めた準備
+- **実行成功の視点**: 当日スムーズに進行できることを最優先とした準備
 
 
 
@@ -121,7 +120,7 @@ User: 回答例: 2
 - 最終的な選択はユーザーに委ねる
 
 **スキップ判断基準例**:
-- 短期間の旅行 → plan-itineraryを簡略化してplan-bookingへ
-- 国内旅行 → ビザ関連の準備をスキップ
-- 単純な旅行 → plan-bookingを簡略化してplan-preparationへ
+- 短期間・単純な旅行 → phase3-step1（詳細準備工程）をスキップ
+- 慣れた目的地・国内旅行 → phase3-step1を簡略化
+- 海外・長期・特殊な旅行 → 全ステップ実行推奨
 

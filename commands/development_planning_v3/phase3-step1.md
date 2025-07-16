@@ -15,20 +15,20 @@ description: "インターフェース部分の検証項目関係性フローチ
 
 ### Phase 1: 要件定義フェーズ
 プロジェクトの目的、ユーザー要件、インタラクション設計を明確化
-- docs/planning_v3//$ARGUMENTS/phase1-step1-idea-and-goals.md # アイデアと目標の明確化
-- docs/planning_v3//$ARGUMENTS/phase1-step2-user-requirements.md # ユーザー要件定義
-- docs/planning_v3//$ARGUMENTS/phase1-step3-user-interaction.md # ユーザーインタラクション設計
+- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase1-step1-idea-and-goals.md # アイデアと目標の明確化
+- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase1-step2-user-requirements.md # ユーザー要件定義
+- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase1-step3-user-interaction.md # ユーザーインタラクション設計
 
 ### Phase 2: システム設計フェーズ
 データ構造、システムフロー、API設計を策定
-- docs/planning_v3//$ARGUMENTS/phase2-step1-data-structure.md # データ構造定義
-- docs/planning_v3//$ARGUMENTS/phase2-step2-system-dataflow.md # システム全体データフロー設計
-- docs/planning_v3//$ARGUMENTS/phase2-step3-api-design.md # API設計（個別API）
+- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase2-step1-data-structure.md # データ構造定義
+- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase2-step2-system-dataflow.md # システム全体データフロー設計
+- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase2-step3-api-design.md # API設計（個別API）
 
 ### Phase 3: 実装準備フェーズ
 テスト計画と実装設計を完成
-- **🎯 docs/planning_v3//$ARGUMENTS/phase3-step1-test-plan.md** # テスト計画策定 ← **現在のステップ**
-- docs/planning_v3//$ARGUMENTS/phase3-step2-implementation-design.md # 実装設計
+- **🎯 /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase3-step1-test-plan.md** # テスト計画策定 ← **現在のステップ**
+- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase3-step2-implementation-design.md # 実装設計
 
 
 **複数の質問がある場合の処理原則**：
@@ -41,8 +41,8 @@ description: "インターフェース部分の検証項目関係性フローチ
 
 実際の作成済みファイル一覧
 ```bash
-!mkdir -p docs/planning_v3//$ARGUMENTS
-!tree -L 2 docs/planning_v3//$ARGUMENTS | ls -l docs/planning_v3//$ARGUMENTS
+!mkdir -p /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS
+!tree -L 2 /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS | ls -l /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS
 ```
 
 ### 2. 依存関係の確認
@@ -93,7 +93,6 @@ User: 回答例: 2
 - テスト環境やツールの制約はありますか？
 - 品質基準や受け入れ条件は明確ですか？
 - どの機能を優先的にテストしたいですか？
-- どの程度のテストカバレッジを目指しますか？
 
 
 ### 4. 設計案の提示と承認
@@ -101,7 +100,7 @@ User: 回答例: 2
 
 ### 5. 最終確認とドキュメント作成
 
-承認された内容を @docs/planning_v3//$ARGUMENTS/phase3-step1-test-plan.md に出力してください
+承認された内容を @/Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase3-step1-test-plan.md に出力してください
 
 ## 重要な対話ポイント
 - テストの範囲が曖昧な場合は、具体的なシナリオや例を挙げて明確化してください
