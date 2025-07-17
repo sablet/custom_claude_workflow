@@ -15,20 +15,20 @@ description: "ソフトウェア開発のアイデアと目標の明確化"
 
 ### Phase 1: 要件定義フェーズ
 プロジェクトの目的、ユーザー要件、インタラクション設計を明確化
-- **🎯 /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase1-step1-idea-and-goals.md** # アイデアと目標の明確化 ← **現在のステップ**
-- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase1-step2-user-requirements.md # ユーザー要件定義
-- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase1-step3-user-interaction.md # ユーザーインタラクション設計
+- **🎯 /Users/mikke/Documents/planning_docs/development_planning_v3/$ARGUMENTS/phase1-step1-idea-and-goals.md** # アイデアと目標の明確化 ← **現在のステップ**
+- /Users/mikke/Documents/planning_docs/development_planning_v3/$ARGUMENTS/phase1-step2-user-requirements.md # ユーザー要件定義
+- /Users/mikke/Documents/planning_docs/development_planning_v3/$ARGUMENTS/phase1-step3-user-interaction.md # ユーザーインタラクション設計
 
 ### Phase 2: システム設計フェーズ
 データ構造、システムフロー、API設計を策定
-- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase2-step1-data-structure.md # データ構造定義
-- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase2-step2-system-dataflow.md # システム全体データフロー設計
-- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase2-step3-api-design.md # API設計（個別API）
+- /Users/mikke/Documents/planning_docs/development_planning_v3/$ARGUMENTS/phase2-step1-data-structure.md # データ構造定義
+- /Users/mikke/Documents/planning_docs/development_planning_v3/$ARGUMENTS/phase2-step2-system-dataflow.md # システム全体データフロー設計
+- /Users/mikke/Documents/planning_docs/development_planning_v3/$ARGUMENTS/phase2-step3-api-design.md # API設計（個別API）
 
 ### Phase 3: 実装準備フェーズ
 テスト計画と実装設計を完成
-- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase3-step1-test-plan.md # テスト計画策定
-- /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase3-step2-implementation-design.md # 実装設計
+- /Users/mikke/Documents/planning_docs/development_planning_v3/$ARGUMENTS/phase3-step1-test-plan.md # テスト計画策定
+- /Users/mikke/Documents/planning_docs/development_planning_v3/$ARGUMENTS/phase3-step2-implementation-design.md # 実装設計
 
 
 **複数の質問がある場合の処理原則**：
@@ -41,8 +41,8 @@ description: "ソフトウェア開発のアイデアと目標の明確化"
 
 実際の作成済みファイル一覧
 ```bash
-!mkdir -p /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS
-!tree -L 2 /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS | ls -l /Users/mikke/Documents/docs/planning_v3/$ARGUMENTS
+!mkdir -p /Users/mikke/Documents/planning_docs/development_planning_v3/$ARGUMENTS
+!tree -L 2 /Users/mikke/Documents/planning_docs/development_planning_v3/$ARGUMENTS | ls -l /Users/mikke/Documents/planning_docs/development_planning_v3/$ARGUMENTS
 ```
 
 ### 2. 依存関係の確認
@@ -119,7 +119,7 @@ User: 回答例: 2
 
 ### 5. 最終確認とドキュメント作成
 
-承認された内容を @/Users/mikke/Documents/docs/planning_v3/$ARGUMENTS/phase1-step1-idea-and-goals.md に出力してください
+承認された内容を @/Users/mikke/Documents/planning_docs/development_planning_v3/$ARGUMENTS/phase1-step1-idea-and-goals.md に出力してください
 
 ## 重要な対話ポイント
 - **コアコンセプトの抽出が最重要**: 複雑な説明より、数フレーズで「何を作るか」の本質を表現することを優先してください

@@ -1,13 +1,13 @@
 ---
-allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "WebFetch"]
-description: "各候補での予約可能性調査と最終決定・予約実行"
----# 複数ケース具体調査
+allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "WebFetch", "mcp__booking-fetcher__fetch_bookingcom_hotels", "TodoWrite"]
+description: "交通手段・観光地の具体的調査と決定"
+---# 交通・観光調査
 
 プロジェクトID: $ARGUMENTS
 
 ## 概要
-Phase1で絞り込んだ各候補地×候補日時の組み合わせで、**予約可能性と詳細条件を並行調査**します。
-現実的な制約（予約状況・価格・交通）を踏まえた比較検討を行い、**最終決定と予約実行**まで進めます。
+Phase1で絞り込んだ候補地について、**交通手段・観光地の具体的調査**を実施します。
+WebSearch/WebFetchを使用して予約可能性・価格・営業状況を調査し、現実的な選択肢を決定します。
 
 
 ## プロジェクト全体構想
@@ -16,15 +16,18 @@ Phase1で絞り込んだ各候補地×候補日時の組み合わせで、**予�
 
 ### Phase 1: 旅行企画・候補絞込み
 旅行コンセプトを策定し、候補地・候補日時を範囲指定
-- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase1-step1.md # 旅行企画・候補絞込み
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase1-step1-planning.md # 旅行企画・候補絞込み
 
-### Phase 2: 複数ケース具体調査
-各候補での予約可能性を調査し、最終決定・予約実行
-- **🎯 /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step1.md** # 複数ケース具体調査 ← **現在のステップ**
+### Phase 2: 具体調査・決定
+交通・観光・宿泊の具体的調査と行程作成
+- **🎯 /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step1-transport-sightseeing.md** # 交通・観光調査 ← **現在のステップ**
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step2-itinerary-draft.md # 行程大枠作成
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step3-hotel-search.md # ホテル調査・決定
 
-### Phase 3: 詳細準備工程
-予約確定後の実行準備と最終チェック
-- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step1.md # 詳細準備工程
+### Phase 3: 詳細化・準備
+詳細スケジュール作成と最終準備
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step1-schedule-detail.md # 詳細スケジュール検討
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step2-final-prep.md # 最終準備・持ち物チェック
 
 
 **複数の質問がある場合の処理原則**：
@@ -47,7 +50,7 @@ Phase1で絞り込んだ各候補地×候補日時の組み合わせで、**予�
 
 
 - **依存元**: 旅行企画・候補絞込み
-- **依存先**: 詳細準備工程
+- **依存先**: 行程大枠作成
 ### 3. 情報収集と質問
 
 **対話原則：**
@@ -85,78 +88,18 @@ User: 回答例: 2
 
 
 **確認すべき項目：**
-- Phase1で絞り込んだ各候補地について、どの点を最も重視して比較したいですか？
+- 交通手段で最も重視したいポイントは何ですか？（価格、時間、快適性など）
+- 観光で最も重視したいことは何ですか？（歴史、文化、自然、グルメなど）
 - 予約の取りやすさと理想的な条件、どちらを優先しますか？
 - 代替案や妥協できる点はありますか？
-- 予約開始時期や締切に制約はありますか？
-- キャンセルポリシーをどの程度重視しますか？
 
-
-### 3. 複数候補の並行調査
-**Phase1で設定した候補範囲での具体調査:**
-```
-各候補地×候補日時の組み合わせを並行調査します：
-
-## 予約可能性調査（WebSearch/WebFetch必須）
-**CRITICAL**: 全ての調査で推論ではなくWebSearch/WebFetchを使用してソース基づく情報収集を実施してください
-
-### 宿泊施設調査
-- WebSearchで各候補地の宿泊施設空室状況を検索
-- 予約サイト（楽天トラベル、じゃらん、Booking.com等）をWebFetchで確認
-- 価格帯とキャンセルポリシーを具体的に調査
-
-### 交通手段調査  
-- WebSearchで交通手段の予約状況・価格を検索
-- 航空会社・JR・バス会社の公式サイトをWebFetchで確認
-- 割引・早期予約特典の有無を調査
-
-### アクティビティ・観光地調査
-- WebSearchで各候補地の観光情報を検索
-- 現地観光協会・施設公式サイトをWebFetchで最新情報確認
-- 予約必要性・営業状況・料金を具体的に調査
-
-（各候補について同時に調査し、ソース基づく比較表を作成）
-
-## 現実的制約の確認
-- 予算内での実現可能性（調査した実際の価格基準）
-- 希望条件との適合度（WebFetch結果との照合）
-- 代替案・妥協点の検討（複数ソースからの情報基準）
-
-## 調査結果ドキュメント出力要件
-**CRITICAL**: 全ての調査結果は以下の形式で出力し、ユーザーが後から確認・検証できるようにする：
-
-### 必須記載事項
-- **調査日時**: 情報取得日時を明記
-- **情報源URL**: WebSearch/WebFetchで取得した全URLを記載
-- **サイト名・運営者**: 情報源の信頼性判断用
-- **価格・空室情報の確認日**: 変動する情報の取得タイミング
-- **予約リンク**: 実際の予約可能なダイレクトリンク
-
-### 出力フォーマット例
-```
-## [候補地名] 調査結果
-**調査実施**: 2024年XX月XX日 XX:XX
-
-### 宿泊施設
-- [ホテル名](直接URL) - 価格: XX,XXX円/泊
-  - 情報源: [楽天トラベル](具体的URL)
-  - 確認日時: 2024年XX月XX日 XX:XX
-
-### 交通手段  
-- [交通手段](予約URL) - 価格: XX,XXX円
-  - 情報源: [JR東日本](具体的URL)
-  - 確認日時: 2024年XX月XX日 XX:XX
-```
-
-（WebSearch/WebFetch調査結果を基に最終決定と予約実行）
-```
 
 ### 4. 設計案の提示と承認
 収集した情報を基に、設計案を提示し、ユーザーの承認を得てください。
 
 ### 5. 最終確認とドキュメント作成
 
-承認された内容を @/Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step1.md に出力してください
+承認された内容を @/Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step1-transport-sightseeing.md に出力してください
 
 ## 重要な対話ポイント
 - **WebSearch/WebFetch必須の調査プロセス**: 推論や一般的な知識ではなく、必ずWebSearch/WebFetchを使って最新の実際の情報を収集する
@@ -164,7 +107,6 @@ User: 回答例: 2
 - **各候補の並行調査を重視**: 一つずつではなく、複数候補を同時に調査して比較
 - **予約可能性を最優先**: 理想的な計画より、実際に予約できる現実的な選択肢を重視
 - **代替案の準備**: 第一希望が取れない場合のバックアッププランも同時に検討
-- **最終決定と予約実行**: WebSearch/WebFetch調査結果を基に決定し、実際の予約まで進める
 
 
 

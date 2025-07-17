@@ -1,5 +1,5 @@
 ---
-allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "WebFetch"]
+allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "WebFetch", "mcp__booking-fetcher__fetch_bookingcom_hotels", "TodoWrite"]
 description: "旅行コンセプト策定と候補地・候補日時の範囲絞込み"
 ---# 旅行企画・候補絞込み
 
@@ -17,15 +17,18 @@ description: "旅行コンセプト策定と候補地・候補日時の範囲絞
 
 ### Phase 1: 旅行企画・候補絞込み
 旅行コンセプトを策定し、候補地・候補日時を範囲指定
-- **🎯 /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase1-step1.md** # 旅行企画・候補絞込み ← **現在のステップ**
+- **🎯 /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase1-step1-planning.md** # 旅行企画・候補絞込み ← **現在のステップ**
 
-### Phase 2: 複数ケース具体調査
-各候補での予約可能性を調査し、最終決定・予約実行
-- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step1.md # 複数ケース具体調査
+### Phase 2: 具体調査・決定
+交通・観光・宿泊の具体的調査と行程作成
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step1-transport-sightseeing.md # 交通・観光調査
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step2-itinerary-draft.md # 行程大枠作成
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step3-hotel-search.md # ホテル調査・決定
 
-### Phase 3: 詳細準備工程
-予約確定後の実行準備と最終チェック
-- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step1.md # 詳細準備工程
+### Phase 3: 詳細化・準備
+詳細スケジュール作成と最終準備
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step1-schedule-detail.md # 詳細スケジュール検討
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step2-final-prep.md # 最終準備・持ち物チェック
 
 
 **複数の質問がある場合の処理原則**：
@@ -48,7 +51,7 @@ description: "旅行コンセプト策定と候補地・候補日時の範囲絞
 
 
 - **依存元**: なし（旅行計画の起点）
-- **依存先**: 複数ケース具体調査
+- **依存先**: 交通・観光調査
 ### 3. 情報収集と質問
 
 **対話原則：**
@@ -100,29 +103,12 @@ User: 回答例: 2
 - 予算の大まかな上限はどの程度ですか？
 
 
-### 3. 旅行コンセプトの抽出と確認
-収集した情報から、まず**この旅行の本質を一行で表現**してください：
-
-```
-まず、この旅行の本質を一言で表すとどのようなものでしょうか？
-数フレーズ程度（最大でも140文字以内）で、「どんな旅行なのか」の核心部分を教えてください。
-※具体的な場所や詳細はphase1-step2で扱うため、ここでは旅行の本質のみに集中してください。
-
-例：
-- 心身リフレッシュのための温泉旅行
-- 歴史と文化を学ぶ教育的な旅行
-- 家族との絆を深める記念旅行
-- 新しい体験を求める冒険旅行
-- グルメを楽しむ食べ歩き旅行
-```
-
-
 ### 4. 設計案の提示と承認
 収集した情報を基に、設計案を提示し、ユーザーの承認を得てください。
 
 ### 5. 最終確認とドキュメント作成
 
-承認された内容を @/Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase1-step1.md に出力してください
+承認された内容を @/Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase1-step1-planning.md に出力してください
 
 ## 重要な対話ポイント
 - **旅行の本質的な目的の抽出が最重要**: 「なんとなく行きたい」ではなく、具体的な動機や期待を明確化してください

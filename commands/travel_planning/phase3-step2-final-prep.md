@@ -1,13 +1,13 @@
 ---
-allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "WebFetch"]
-description: "予約確定後の詳細準備工程と実行準備"
----# 詳細準備工程
+allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "WebFetch", "mcp__booking-fetcher__fetch_bookingcom_hotels", "TodoWrite"]
+description: "最終準備・持ち物チェック"
+---# 最終準備・持ち物チェック
 
 プロジェクトID: $ARGUMENTS
 
 ## 概要
-予約確定後の **詳細準備工程** を実施します。持ち物リストに加え、現地最新情報調査、
-手続き確認、緊急時対応計画、当日行動スケジュール詳細化など、実行成功のための最終準備を行います。
+旅行実行のための **最終準備・持ち物チェック** を実施します。
+現地最新情報調査、手続き確認、緊急時対応計画、当日行動の最終確認を行います。
 
 
 ## プロジェクト全体構想
@@ -16,15 +16,18 @@ description: "予約確定後の詳細準備工程と実行準備"
 
 ### Phase 1: 旅行企画・候補絞込み
 旅行コンセプトを策定し、候補地・候補日時を範囲指定
-- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase1-step1.md # 旅行企画・候補絞込み
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase1-step1-planning.md # 旅行企画・候補絞込み
 
-### Phase 2: 複数ケース具体調査
-各候補での予約可能性を調査し、最終決定・予約実行
-- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step1.md # 複数ケース具体調査
+### Phase 2: 具体調査・決定
+交通・観光・宿泊の具体的調査と行程作成
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step1-transport-sightseeing.md # 交通・観光調査
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step2-itinerary-draft.md # 行程大枠作成
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase2-step3-hotel-search.md # ホテル調査・決定
 
-### Phase 3: 詳細準備工程
-予約確定後の実行準備と最終チェック
-- **🎯 /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step1.md** # 詳細準備工程 ← **現在のステップ**
+### Phase 3: 詳細化・準備
+詳細スケジュール作成と最終準備
+- /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step1-schedule-detail.md # 詳細スケジュール検討
+- **🎯 /Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step2-final-prep.md** # 最終準備・持ち物チェック ← **現在のステップ**
 
 
 **複数の質問がある場合の処理原則**：
@@ -46,7 +49,7 @@ description: "予約確定後の詳細準備工程と実行準備"
 依存元のドキュメントを確認してから次に進んでください
 
 
-- **依存元**: 複数ケース具体調査
+- **依存元**: 詳細スケジュール検討
 - **依存先**: 
 ### 3. 情報収集と質問
 
@@ -97,13 +100,13 @@ User: 回答例: 2
 
 ### 5. 最終確認とドキュメント作成
 
-承認された内容を @/Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step1.md に出力してください
+承認された内容を @/Users/mikke/Documents/planning_docs/travel_planning/$ARGUMENTS/phase3-step2-final-prep.md に出力してください
 
 ## 重要な対話ポイント
-- **予約確定が前提**: Phase2で予約が完了していることを確認してから進める
 - **現地最新情報の重視**: 天気予報、交通情報、営業状況など、直近の情報を収集
 - **包括的な準備**: 持ち物だけでなく、手続き・連絡先・緊急時対応まで含めた準備
 - **実行成功の視点**: 当日スムーズに進行できることを最優先とした準備
+- **最終チェック**: 全ての予約・準備が完了していることを確認
 
 
 

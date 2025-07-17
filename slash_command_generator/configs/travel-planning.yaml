@@ -2,20 +2,24 @@
 
 # ステップ参照用の正式名称定義（表記揺れ防止）
 step_references:
-  phase1-step1: "旅行企画・候補絞込み"
-  phase2-step1: "複数ケース具体調査"
-  phase3-step1: "詳細準備工程"
+  phase1-step1-planning: "旅行企画・候補絞込み"
+  phase2-step1-transport-sightseeing: "交通・観光調査"
+  phase2-step2-itinerary-draft: "行程大枠作成"
+  phase2-step3-hotel-search: "ホテル調査・決定"
+  phase3-step1-schedule-detail: "詳細スケジュール検討"
+  phase3-step2-final-prep: "最終準備・持ち物チェック"
 
 # 共通要素定義
 common:
-  base_tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "WebFetch"]
+  base_tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "WebFetch", "mcp__booking-fetcher__fetch_bookingcom_hotels", "TodoWrite"]
   output_path: "~/Documents/planning_docs/travel_planning/"
   commands_output_dir: "~/.claude/commands/travel_planning"
   
   # WebSearch/WebFetch使用ガイドライン
   web_research_guidelines: |
     **WebSearch/WebFetch使用原則**:
-    - Phase2-step1: 予約可能性・価格・営業状況の調査で必須使用
+    - Phase2-step1: 交通・観光の予約可能性・価格・営業状況の調査で必須使用
+    - Phase2-step3: ホテル調査はMCPツール（mcp__booking-fetcher__fetch_bookingcom_hotels）を使用
     - Phase3-step1: 現地最新情報・天気・交通情報の調査で必須使用
     - 推論や一般知識ではなく、必ず実際のソースから情報収集
     - 複数のソース（公式サイト、予約サイト、観光協会等）からの情報照合
@@ -33,29 +37,44 @@ common:
 # 個別要素（step別に比較可能な構造）
 individual_elements:
   description:
-    phase1-step1: "旅行コンセプト策定と候補地・候補日時の範囲絞込み"
-    phase2-step1: "各候補での予約可能性調査と最終決定・予約実行"
-    phase3-step1: "予約確定後の詳細準備工程と実行準備"
+    phase1-step1-planning: "旅行コンセプト策定と候補地・候補日時の範囲絞込み"
+    phase2-step1-transport-sightseeing: "交通手段・観光地の具体的調査と決定"
+    phase2-step2-itinerary-draft: "行程・スケジュールの大枠作成"
+    phase2-step3-hotel-search: "ホテル調査・比較分析・決定"
+    phase3-step1-schedule-detail: "詳細スケジュール検討と時間配分"
+    phase3-step2-final-prep: "最終準備・持ち物チェック"
 
   overview:
-    phase1-step1: |
+    phase1-step1-planning: |
       この手順では、旅行の **なぜ行くのか** という動機と **どんな旅行にしたいか** というコンセプトを明確化し、
       **候補地（2-4箇所程度）** と **候補日時の範囲** を絞り込みます。
       最終決定はせず、次ステップで具体調査する対象の範囲を設定することが目的です。
-    phase2-step1: |
-      Phase1で絞り込んだ各候補地×候補日時の組み合わせで、**予約可能性と詳細条件を並行調査**します。
-      現実的な制約（予約状況・価格・交通）を踏まえた比較検討を行い、**最終決定と予約実行**まで進めます。
-    phase3-step1: |
-      予約確定後の **詳細準備工程** を実施します。持ち物リストに加え、現地最新情報調査、
-      手続き確認、緊急時対応計画、当日行動スケジュール詳細化など、実行成功のための最終準備を行います。
+    phase2-step1-transport-sightseeing: |
+      Phase1で絞り込んだ候補地について、**交通手段・観光地の具体的調査**を実施します。
+      WebSearch/WebFetchを使用して予約可能性・価格・営業状況を調査し、現実的な選択肢を決定します。
+    phase2-step2-itinerary-draft: |
+      決定した交通手段・観光地を基に、**行程・スケジュールの大枠**を作成します。
+      移動ルート・観光地の組み合わせ最適化と大まかな時間配分を計画します。
+    phase2-step3-hotel-search: |
+      MCPツール（mcp__booking-fetcher__fetch_bookingcom_hotels）を使用して、**ホテル調査・比較分析**を実施します。
+      1万円以内のコスパ重視推奨と、マトリクス分析による価格比較を行います。
+    phase3-step1-schedule-detail: |
+      大枠の行程を基に、**詳細スケジュール検討**を実施します。
+      時間単位での詳細スケジュール作成と移動時間・待ち時間の精密計算を行います。
+    phase3-step2-final-prep: |
+      旅行実行のための **最終準備・持ち物チェック** を実施します。
+      現地最新情報調査、手続き確認、緊急時対応計画、当日行動の最終確認を行います。
 
   dependencies_check:
-    phase1-step1: []
-    phase2-step1: ["phase1-step1"]
-    phase3-step1: ["phase2-step1"]
+    phase1-step1-planning: []
+    phase2-step1-transport-sightseeing: ["phase1-step1-planning"]
+    phase2-step2-itinerary-draft: ["phase2-step1-transport-sightseeing"]
+    phase2-step3-hotel-search: ["phase2-step2-itinerary-draft"]
+    phase3-step1-schedule-detail: ["phase2-step3-hotel-search"]
+    phase3-step2-final-prep: ["phase3-step1-schedule-detail"]
 
   specific_questions:
-    phase1-step1:
+    phase1-step1-planning:
       - "今回の旅行の主な目的は何ですか？（リラックス、観光、体験、学習など）"
       - "どんな旅行スタイルを希望していますか？（のんびり、アクティブ、文化重視など）"
       - "旅行で最も重視したいことは何ですか？"
@@ -68,13 +87,21 @@ individual_elements:
       - "候補となる地域や国はありますか？（2-4箇所程度に絞り込み）"
       - "候補となる時期・期間はいつ頃ですか？（範囲で指定）"
       - "予算の大まかな上限はどの程度ですか？"
-    phase2-step1:
-      - "Phase1で絞り込んだ各候補地について、どの点を最も重視して比較したいですか？"
+    phase2-step1-transport-sightseeing:
+      - "交通手段で最も重視したいポイントは何ですか？（価格、時間、快適性など）"
+      - "観光で最も重視したいことは何ですか？（歴史、文化、自然、グルメなど）"
       - "予約の取りやすさと理想的な条件、どちらを優先しますか？"
       - "代替案や妥協できる点はありますか？"
-      - "予約開始時期や締切に制約はありますか？"
-      - "キャンセルポリシーをどの程度重視しますか？"
-    phase3-step1:
+    phase2-step2-itinerary-draft:
+      - "一日の行程でどの程度のボリュームを希望しますか？（詰め込み型、ゆったり型）"
+      - "移動時間と滞在時間のバランスはどうしたいですか？"
+      - "食事の時間帯やスタイルに希望はありますか？"
+    phase2-step3-hotel-search: []
+    phase3-step1-schedule-detail:
+      - "詳細スケジュールで特に重視したいポイントは何ですか？"
+      - "予定より時間がかかった場合の優先順位はありますか？"
+      - "移動時間に余裕をどの程度見ておきたいですか？"
+    phase3-step2-final-prep:
       - "現地の最新情報で特に確認したい項目はありますか？"
       - "持参したい特別なものや制限のあるものはありますか？"
       - "健康面・安全面で特に気をつけることはありますか？"
@@ -82,64 +109,98 @@ individual_elements:
       - "出発前に完了すべき手続きや準備はありますか？"
 
   dependencies_from_to:
-    phase1-step1:
+    phase1-step1-planning:
       from: "なし（旅行計画の起点）"
-      to: ["phase2-step1"]
-    phase2-step1:
-      from: ["phase1-step1"]
-      to: ["phase3-step1"]
-    phase3-step1:
-      from: ["phase2-step1"]
+      to: ["phase2-step1-transport-sightseeing"]
+    phase2-step1-transport-sightseeing:
+      from: ["phase1-step1-planning"]
+      to: ["phase2-step2-itinerary-draft"]
+    phase2-step2-itinerary-draft:
+      from: ["phase2-step1-transport-sightseeing"]
+      to: ["phase2-step3-hotel-search"]
+    phase2-step3-hotel-search:
+      from: ["phase2-step2-itinerary-draft"]
+      to: ["phase3-step1-schedule-detail"]
+    phase3-step1-schedule-detail:
+      from: ["phase2-step3-hotel-search"]
+      to: ["phase3-step2-final-prep"]
+    phase3-step2-final-prep:
+      from: ["phase3-step1-schedule-detail"]
       to: ["旅行実行"]
 
   interaction_points:
-    phase1-step1: |
+    phase1-step1-planning: |
       - **旅行の本質的な目的の抽出が最重要**: 「なんとなく行きたい」ではなく、具体的な動機や期待を明確化してください
       - **候補地は2-4箇所程度に絞込み**: 多すぎると次ステップでの調査が困難、少なすぎると選択肢が不足
       - **候補日時は範囲指定**: 「3月中旬〜4月上旬」「夏休み期間」など、柔軟性を保った設定
       - **最終決定はしない**: 次ステップでの具体調査に必要な範囲設定に留める
-    phase2-step1: |
+    phase2-step1-transport-sightseeing: |
       - **WebSearch/WebFetch必須の調査プロセス**: 推論や一般的な知識ではなく、必ずWebSearch/WebFetchを使って最新の実際の情報を収集する
       - **ソース基づく調査の徹底**: 予約サイト、公式サイト、観光協会等の具体的なソースから情報を取得
       - **各候補の並行調査を重視**: 一つずつではなく、複数候補を同時に調査して比較
       - **予約可能性を最優先**: 理想的な計画より、実際に予約できる現実的な選択肢を重視
       - **代替案の準備**: 第一希望が取れない場合のバックアッププランも同時に検討
-      - **最終決定と予約実行**: WebSearch/WebFetch調査結果を基に決定し、実際の予約まで進める
-    phase3-step1: |
-      - **予約確定が前提**: Phase2で予約が完了していることを確認してから進める
+    phase2-step2-itinerary-draft: |
+      - **決定された交通・観光を基に行程作成**: Phase2-step1の結果を活用
+      - **移動ルートの最適化**: 効率的な移動順序と時間配分を重視
+      - **大まかな時間配分**: 詳細な時間ではなく、1日の大枠を設定
+      - **柔軟性の確保**: 後から調整可能な余裕を持った計画
+    phase2-step3-hotel-search: |
+      - **MCPツールの活用**: mcp__booking-fetcher__fetch_bookingcom_hotelsを使用
+      - **即座にマトリクス分析実行**: 前ステップの情報を基に直ちにホテル調査を開始
+      - **コスパ重視の分析**: 1万円以内の推奨ホテルを中心に比較
+      - **マトリクス分析**: 日程×価格の比較表で最適な選択肢を提示
+      - **行程に適した立地**: Phase2-step2の行程を考慮した立地選択
+      - **結果提示後の確認**: マトリクス作成後に必要に応じて条件調整
+    phase3-step1-schedule-detail: |
+      - **時間単位の詳細化**: 大まかな行程を具体的な時間割に変換
+      - **移動時間の精密計算**: 実際の移動時間と待ち時間を考慮
+      - **現実的な時間配分**: 余裕を持った実行可能なスケジュール
+      - **優先順位の設定**: 時間が足りない場合の調整方針を明確化
+    phase3-step2-final-prep: |
       - **現地最新情報の重視**: 天気予報、交通情報、営業状況など、直近の情報を収集
       - **包括的な準備**: 持ち物だけでなく、手続き・連絡先・緊急時対応まで含めた準備
       - **実行成功の視点**: 当日スムーズに進行できることを最優先とした準備
+      - **最終チェック**: 全ての予約・準備が完了していることを確認
 
 # 全体フェーズ構造定義
 phase_structure:
   enable_overview: true
-  show_on_steps: ["phase1-step1"]
+  show_on_steps: ["phase1-step1-planning"]
   
   phases:
     phase1:
       title: "Phase 1: 旅行企画・候補絞込み"
       description: "旅行コンセプトを策定し、候補地・候補日時を範囲指定"
       steps:
-        - id: "phase1-step1"
-          filename: "phase1-step1.md"
+        - id: "phase1-step1-planning"
+          filename: "phase1-step1-planning.md"
           description: "旅行企画・候補絞込み"
     
     phase2:
-      title: "Phase 2: 複数ケース具体調査"
-      description: "各候補での予約可能性を調査し、最終決定・予約実行"
+      title: "Phase 2: 具体調査・決定"
+      description: "交通・観光・宿泊の具体的調査と行程作成"
       steps:
-        - id: "phase2-step1"
-          filename: "phase2-step1.md"
-          description: "複数ケース具体調査"
+        - id: "phase2-step1-transport-sightseeing"
+          filename: "phase2-step1-transport-sightseeing.md"
+          description: "交通・観光調査"
+        - id: "phase2-step2-itinerary-draft"
+          filename: "phase2-step2-itinerary-draft.md"
+          description: "行程大枠作成"
+        - id: "phase2-step3-hotel-search"
+          filename: "phase2-step3-hotel-search.md"
+          description: "ホテル調査・決定"
     
     phase3:
-      title: "Phase 3: 詳細準備工程"
-      description: "予約確定後の実行準備と最終チェック"
+      title: "Phase 3: 詳細化・準備"
+      description: "詳細スケジュール作成と最終準備"
       steps:
-        - id: "phase3-step1"
-          filename: "phase3-step1.md"
-          description: "詳細準備工程"
+        - id: "phase3-step1-schedule-detail"
+          filename: "phase3-step1-schedule-detail.md"
+          description: "詳細スケジュール検討"
+        - id: "phase3-step2-final-prep"
+          filename: "phase3-step2-final-prep.md"
+          description: "最終準備・持ち物チェック"
 
 # 段階的質問処理原則
 sequential_questioning:
@@ -274,3 +335,46 @@ special_processes:
       
       （WebSearch/WebFetch調査結果を基に最終決定と予約実行）
       ```
+  
+  phase2-step3-hotel-search:
+    hotel_search_process: |
+      ### MCPツールでのホテル調査・比較分析
+      
+      **実行アプローチ**:
+      - **事前ヒアリング無し**: 前ステップの情報を基に即座にホテル調査を開始
+      - **マトリクス作成優先**: 詳細確認の前にまず包括的なホテル比較表を作成
+      - **結果提示後の調整**: マトリクス提示後に必要に応じて条件調整を行う
+      
+      **実行手順**:
+      1. 引数解析と検証（エリア名・期間抽出）
+      2. MCPツールでのデータ取得（mcp__booking-fetcher__fetch_bookingcom_hotels）
+      3. データ処理とフィルタリング（ドミトリー・カプセル・ホステル除外）
+      4. マトリクス分析の実行（日程×価格比較表）
+      5. 価格帯別推奨分析（1万円以内コスパ重視）
+      6. おすすめホテルランキング生成
+      7. **結果提示後の確認**: 必要に応じて条件調整やフィルタリングを実施
+      
+      **除外対象**:
+      - ドミトリー、カプセルホテル、ホステル、ゲストハウス、民宿
+      - バックパッカー向け宿泊施設、宿泊単価が著しく高い施設
+      
+      **出力形式**:
+      ```markdown
+      ## {エリア名}ホテル予約状況マトリクス（{年月}）
+      
+      | ホテル名 | {日程1} | {日程2} | {日程3} | 評価 |
+      |----------|---------|---------|---------|------|
+      | **ホテルA** | ¥XX,XXX | ¥XX,XXX | ¥XX,XXX | X.X★ |
+      
+      ## 🏆 コスパ重視おすすめホテル（1泊1万円以内）
+      
+      ### 1位: {ホテル名} ⭐{評価}点
+      - **推奨理由**: {推奨理由}
+      - **平均料金**: ¥{平均価格}/泊
+      - **利用可能日**: {利用可能日数}/{全日程数}日
+      ```
+      
+      **マトリクス作成後の確認**:
+      - 予算調整が必要な場合のフィルタリング
+      - 特別な設備要求がある場合の絞り込み
+      - 立地条件の優先順位変更が必要な場合の再分析
